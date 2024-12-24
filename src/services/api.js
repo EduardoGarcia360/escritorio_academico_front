@@ -1,79 +1,123 @@
-import axios from 'axios';
 import { cifrarObjeto } from './codificar';
 
-// console.log('process.env.REACT_APP_API_BASE_URL', process.env.REACT_APP_API_BASE_URL)
+// Base URL de la API desde las variables de entorno
 const URI = process.env.REACT_APP_API_BASE_URL;
-
-const apiClient = axios.create({
-    baseURL: URI, // URL base de la API
-    timeout: 5000, // Tiempo de espera opcional
-});
-
-const setAuthorizationHeader = (token) => ({
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-    validateStatus: (status) => status < 500, // Considera cualquier estado < 500 como manejable
-});
 
 export const api = {
     // Solicitud GET
-    get: async (token, endpoint) => {
+    get: async (endpoint) => {
         try {
-            const response = await apiClient.get(endpoint, setAuthorizationHeader(token));
-            // console.log('get', response)
-            return { data: response.data, status: response.status }; // Retorna los datos de la respuesta
+            const response = await fetch(`${URI}${endpoint}`, {
+                method: 'GET',
+                credentials: 'include', // Habilita envío automático de cookies
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return { status: 'ERROR', code: response.status, message: data.message || 'Error en la solicitud GET' };
+            }
+
+            return { data, status: response.status };
         } catch (error) {
-            throw error.response?.data || error.message; // Manejo de errores
+            console.error('Error en GET:', error);
+            throw error;
         }
     },
 
     // Solicitud POST
-    post: async (token, endpoint, data) => {
+    post: async (endpoint, data) => {
         try {
-            const response = await apiClient.post(endpoint, cifrarObjeto(data), setAuthorizationHeader(token));
-            // console.log('post', response)
-            return { data: response.data, status: response.status };
+            const response = await fetch(`${URI}${endpoint}`, {
+                method: 'POST',
+                credentials: 'include', // Habilita envío automático de cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cifrarObjeto(data)), // Cifra y envía los datos
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                return { status: 'ERROR', code: response.status, message: data.message || 'Error en la solicitud GET' };
+            }
+
+            return { data: responseData, status: response.status };
         } catch (error) {
-            throw error.response?.data || error.message;
+            console.error('Error en POST:', error);
+            throw error;
         }
     },
 
     // Solicitud PUT
-    put: async (token, endpoint, data) => {
+    put: async (endpoint, data) => {
         try {
-            const response = await apiClient.put(endpoint, cifrarObjeto(data), setAuthorizationHeader(token));
-            // console.log('put', response)
-            return { data: response.data, status: response.status };
+            const response = await fetch(`${URI}${endpoint}`, {
+                method: 'PUT',
+                credentials: 'include', // Habilita envío automático de cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cifrarObjeto(data)), // Cifra y envía los datos
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                return { status: 'ERROR', code: response.status, message: responseData.message || 'Error en la solicitud GET' };
+            }
+
+            return { data: responseData, status: response.status };
         } catch (error) {
-            throw error.response?.data || error.message;
+            console.error('Error en PUT:', error);
+            throw error;
         }
     },
 
     // Solicitud DELETE
-    delete: async (token, endpoint) => {
+    delete: async (endpoint) => {
         try {
-            const response = await apiClient.delete(endpoint, setAuthorizationHeader(token));
-            // console.log('delete', response)
-            return { data: response.data, status: response.status };
+            const response = await fetch(`${URI}${endpoint}`, {
+                method: 'DELETE',
+                credentials: 'include', // Habilita envío automático de cookies
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                return { status: 'ERROR', code: response.status, message: responseData.message || 'Error en la solicitud GET' };
+            }
+
+            return { data: responseData, status: response.status };
         } catch (error) {
-            throw error.response?.data || error.message;
+            console.error('Error en DELETE:', error);
+            throw error;
         }
     },
 
     // Solicitud LOGIN
     login: async (credenciales) => {
         try {
-            const response = await axios.post(`${URI}login`, cifrarObjeto(credenciales));
-            if (!response || !response.data) {
-                return { status: 'ERROR', message: 'No se obtuvo respuesta' };
+            const response = await fetch(`${URI}login`, {
+                method: 'POST',
+                credentials: 'include', // Habilita envío automático de cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cifrarObjeto(credenciales)), // Cifra y envía las credenciales
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                return { status: 'ERROR', code: response.status, message: responseData.message || 'Error en la solicitud GET' };
             }
-            // console.log('solicitud token', response);
-            return response.data;
+
+            return responseData;
         } catch (error) {
-            // Retorna el error en lugar de lanzarlo
-            const errorTmp = error.response?.data || error.message
-            return errorTmp;
+            console.error('Error en LOGIN:', error);
+            return { status: 'ERROR', message: error.message || 'Error interno' };
         }
-    }
+    },
 };
