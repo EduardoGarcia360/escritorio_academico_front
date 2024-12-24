@@ -46,7 +46,7 @@ export const api = {
             return { data: responseData, status: response.status };
         } catch (error) {
             console.error('Error en POST:', error);
-            throw error;
+            return { status: 'ERROR', message: error.message || 'Error en la solicitud POST' };
         }
     },
 
@@ -71,7 +71,7 @@ export const api = {
             return { data: responseData, status: response.status };
         } catch (error) {
             console.error('Error en PUT:', error);
-            throw error;
+            return { status: 'ERROR', message: error.message || 'Error en la solicitud PUT' };
         }
     },
 
@@ -92,7 +92,7 @@ export const api = {
             return { data: responseData, status: response.status };
         } catch (error) {
             console.error('Error en DELETE:', error);
-            throw error;
+            return { status: 'ERROR', message: error.message || 'Error en la solicitud DELETE' };
         }
     },
 
