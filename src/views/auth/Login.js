@@ -1,22 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { api } from "services/api";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 export default function Login() {
   const history = useHistory();
   const [nombre_usuario, setNombreUsuario] = useState("");
   const [contrasena, setContrasena] = useState("");
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Función para verificar si el token existe en las cookies
+  const checkToken = async () => {
+    const response = await api.validateLogin()
+    // console.log('RESPONSE CHECK TOKEN', response)
+    if (response.data.status === 'OK') {
+      history.push("/admin/dashboard");
+    }
+  };
 
   const doLogin = async (e) => {
     e.preventDefault();
-    const credenciales = { nombre_usuario, contrasena }
-    console.log("LOGIN", credenciales);
-    const response = await api.login(credenciales)
-    console.log('response', response)
-    if (response.status === 'OK') {
-      history.push('/admin/dashboard');
+    const credenciales = { nombre_usuario, contrasena };
+    // console.log("LOGIN", credenciales);
+    const response = await api.login(credenciales);
+    // console.log("response", response);
+    if (response.data.status === "OK") {
+      history.push("/admin/dashboard");
     }
   };
+
+  useEffect(() => {
+    if (hasMounted) {
+      checkToken();
+    }
+  }, [hasMounted]);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   return (
     <>

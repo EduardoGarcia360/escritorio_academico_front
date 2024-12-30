@@ -157,4 +157,30 @@ export const api = {
             return { status: 'ERROR', code: 500, message: error.message }
         }
     },
+
+    // Solicitud VALIDAR LOGIN
+    validateLogin: async () => {
+        try {
+            const response = await fetch(`${URI}/auth/validatesession`, {
+                method: 'GET',
+                credentials: 'include', // Habilita envío automático de cookies
+            });
+
+            const data = await response.json();
+            // console.log('DATA validateLogin', data)
+
+            if (!data) {
+                return { status: 'ERROR', code: 500, message: 'Error en la solicitud VALIDAR LOGIN' };
+            }
+
+            // Descifrar el payload si está presente
+            const decryptedData = data.payload ? descifrarObjeto(data.payload) : data;
+            // console.log('DECRYPTED GET', decryptedData)
+
+            return { data: decryptedData, status: response.status };
+        } catch (error) {
+            console.error('Error en VALIDAR LOGIN:', error);
+            return { status: 'ERROR', code: 500, message: error.message }
+        }
+    }
 };
