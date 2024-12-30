@@ -3,6 +3,10 @@ import { cifrarObjeto, descifrarObjeto } from './codificar';
 // Base URL de la API desde las variables de entorno
 const URI = process.env.REACT_APP_API_BASE_URL;
 
+const handleUnauthorizedError = () => {
+    window.location.href = '/auth/login';
+};
+
 export const api = {
     // Solicitud GET
     get: async (endpoint) => {
@@ -11,6 +15,10 @@ export const api = {
                 method: 'GET',
                 credentials: 'include', // Habilita envío automático de cookies
             });
+
+            if (response.status === 403) {
+                handleUnauthorizedError();
+            }
 
             const data = await response.json();
             // console.log('DATA GET', data)
@@ -42,6 +50,10 @@ export const api = {
                 body: JSON.stringify(cifrarObjeto(data)), // Cifra y envía los datos
             });
 
+            if (response.status === 403) {
+                handleUnauthorizedError();
+            }
+
             const responseData = await response.json();
 
             if (!responseData) {
@@ -70,6 +82,10 @@ export const api = {
                 body: JSON.stringify(cifrarObjeto(data)), // Cifra y envía los datos
             });
 
+            if (response.status === 403) {
+                handleUnauthorizedError();
+            }
+
             const responseData = await response.json();
 
             if (!responseData) {
@@ -93,6 +109,10 @@ export const api = {
                 method: 'DELETE',
                 credentials: 'include', // Habilita envío automático de cookies
             });
+
+            if (response.status === 403) {
+                handleUnauthorizedError();
+            }
 
             const responseData = await response.json();
 
