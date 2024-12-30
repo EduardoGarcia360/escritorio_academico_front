@@ -24,7 +24,7 @@ export const api = {
             // console.log('DATA GET', data)
 
             if (!data) {
-                return { status: 'ERROR', code: 500, message: 'Error en la solicitud GET' };
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud GET' } };
             }
 
             // Descifrar el payload si está presente
@@ -34,7 +34,7 @@ export const api = {
             return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en GET:', error);
-            return { status: 'ERROR', code: 500, message: error.message }
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
         }
     },
 
@@ -57,7 +57,7 @@ export const api = {
             const responseData = await response.json();
 
             if (!responseData) {
-                return { status: 'ERROR', code: 500, message: 'Error en la solicitud POST' };
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud POST' } };
             }
 
             // Descifrar el payload si está presente
@@ -66,7 +66,7 @@ export const api = {
             return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en POST:', error);
-            return { status: 'ERROR', code: 500, message: error.message }
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
         }
     },
 
@@ -89,7 +89,7 @@ export const api = {
             const responseData = await response.json();
 
             if (!responseData) {
-                return { status: 'ERROR', code: 500, message: 'Error en la solicitud PUT' };
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud PUT' } };
             }
 
             // Descifrar el payload si está presente
@@ -98,7 +98,7 @@ export const api = {
             return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en PUT:', error);
-            return { status: 'ERROR', code: 500, message: error.message }
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
         }
     },
 
@@ -117,7 +117,7 @@ export const api = {
             const responseData = await response.json();
 
             if (!responseData) {
-                return { status: 'ERROR', code: 500, message: 'Error en la solicitud DELETE' };
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud DELETE' } };
             }
 
             // Descifrar el payload si está presente
@@ -126,7 +126,7 @@ export const api = {
             return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en DELETE:', error);
-            return { status: 'ERROR', code: 500, message: error.message }
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
         }
     },
 
@@ -145,7 +145,7 @@ export const api = {
             const responseData = await response.json();
 
             if (!responseData) {
-                return { status: 'ERROR', code: 500, message: 'Error en la solicitud LOGIN' };
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud LOGIN' } };
             }
 
             // Descifrar el payload si está presente
@@ -154,7 +154,7 @@ export const api = {
             return { data: decryptedData, status: response.status };;
         } catch (error) {
             console.error('Error en LOGIN:', error);
-            return { status: 'ERROR', code: 500, message: error.message }
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
         }
     },
 
@@ -170,7 +170,7 @@ export const api = {
             // console.log('DATA validateLogin', data)
 
             if (!data) {
-                return { status: 'ERROR', code: 500, message: 'Error en la solicitud VALIDAR LOGIN' };
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud VALIDAR LOGIN' } };
             }
 
             // Descifrar el payload si está presente
@@ -180,7 +180,7 @@ export const api = {
             return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en VALIDAR LOGIN:', error);
-            return { status: 'ERROR', code: 500, message: error.message }
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
         }
     }
 };
