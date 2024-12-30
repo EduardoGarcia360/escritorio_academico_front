@@ -1,4 +1,4 @@
-import { cifrarObjeto } from './codificar';
+import { cifrarObjeto, descifrarObjeto } from './codificar';
 
 // Base URL de la API desde las variables de entorno
 const URI = process.env.REACT_APP_API_BASE_URL;
@@ -13,15 +13,20 @@ export const api = {
             });
 
             const data = await response.json();
+            // console.log('DATA GET', data)
 
-            if (!response.ok) {
-                return { status: 'ERROR', code: response.status, message: data.message || 'Error en la solicitud GET' };
+            if (!data) {
+                return { status: 'ERROR', code: 500, message: 'Error en la solicitud GET' };
             }
 
-            return { data, status: response.status };
+            // Descifrar el payload si está presente
+            const decryptedData = data.payload ? descifrarObjeto(data.payload) : data;
+            // console.log('DECRYPTED GET', decryptedData)
+
+            return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en GET:', error);
-            throw error;
+            return { status: 'ERROR', code: 500, message: error.message }
         }
     },
 
@@ -39,14 +44,17 @@ export const api = {
 
             const responseData = await response.json();
 
-            if (!response.ok) {
-                return { status: 'ERROR', code: response.status, message: data.message || 'Error en la solicitud GET' };
+            if (!responseData) {
+                return { status: 'ERROR', code: 500, message: 'Error en la solicitud POST' };
             }
 
-            return { data: responseData, status: response.status };
+            // Descifrar el payload si está presente
+            const decryptedData = responseData.payload ? descifrarObjeto(responseData.payload) : responseData;
+
+            return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en POST:', error);
-            return { status: 'ERROR', message: error.message || 'Error en la solicitud POST' };
+            return { status: 'ERROR', code: 500, message: error.message }
         }
     },
 
@@ -64,14 +72,17 @@ export const api = {
 
             const responseData = await response.json();
 
-            if (!response.ok) {
-                return { status: 'ERROR', code: response.status, message: responseData.message || 'Error en la solicitud GET' };
+            if (!responseData) {
+                return { status: 'ERROR', code: 500, message: 'Error en la solicitud PUT' };
             }
 
-            return { data: responseData, status: response.status };
+            // Descifrar el payload si está presente
+            const decryptedData = responseData.payload ? descifrarObjeto(responseData.payload) : responseData;
+
+            return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en PUT:', error);
-            return { status: 'ERROR', message: error.message || 'Error en la solicitud PUT' };
+            return { status: 'ERROR', code: 500, message: error.message }
         }
     },
 
@@ -85,14 +96,17 @@ export const api = {
 
             const responseData = await response.json();
 
-            if (!response.ok) {
-                return { status: 'ERROR', code: response.status, message: responseData.message || 'Error en la solicitud GET' };
+            if (!responseData) {
+                return { status: 'ERROR', code: 500, message: 'Error en la solicitud DELETE' };
             }
 
-            return { data: responseData, status: response.status };
+            // Descifrar el payload si está presente
+            const decryptedData = responseData.payload ? descifrarObjeto(responseData.payload) : responseData;
+
+            return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en DELETE:', error);
-            return { status: 'ERROR', message: error.message || 'Error en la solicitud DELETE' };
+            return { status: 'ERROR', code: 500, message: error.message }
         }
     },
 
@@ -110,14 +124,17 @@ export const api = {
 
             const responseData = await response.json();
 
-            if (!response.ok) {
-                return { status: 'ERROR', code: response.status, message: responseData.message || 'Error en la solicitud GET' };
+            if (!responseData) {
+                return { status: 'ERROR', code: 500, message: 'Error en la solicitud LOGIN' };
             }
 
-            return responseData;
+            // Descifrar el payload si está presente
+            const decryptedData = responseData.payload ? descifrarObjeto(responseData.payload) : responseData;
+
+            return { data: decryptedData, status: response.status };;
         } catch (error) {
             console.error('Error en LOGIN:', error);
-            return { status: 'ERROR', message: error.message || 'Error interno' };
+            return { status: 'ERROR', code: 500, message: error.message }
         }
     },
 };
