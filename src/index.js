@@ -16,6 +16,8 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 
+import ColegioGestion from "views/admin/ColegioGestion.js";
+
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
@@ -26,6 +28,7 @@ ReactDOM.render(
       <Route path="/landing" exact component={Landing} />
       <Route path="/profile" exact component={Profile} />
       <Route path="/" exact component={Index} />
+      <Route path="/admin/ColegioGestion" exact component={ColegioGestion} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>

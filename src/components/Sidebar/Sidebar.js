@@ -171,6 +171,28 @@ export default function Sidebar() {
                   Maps
                 </Link>
               </li>
+
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/ColegioGestion") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/ColegioGestion"
+                >
+                  <i
+                    className={
+                      "fas fa-solid fa-star mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/ColegioGestion") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Colegio
+                </Link>
+              </li>
             </ul>
 
             {/* Divider */}
