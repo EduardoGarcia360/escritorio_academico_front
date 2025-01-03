@@ -17,6 +17,7 @@ import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 
 import ColegioGestion from "views/admin/ColegioGestion.js";
+import EstudiantePrincipal from "views/admin/EstudiantePrincipal.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -29,6 +30,7 @@ ReactDOM.render(
       <Route path="/profile" exact component={Profile} />
       <Route path="/" exact component={Index} />
       <Route path="/admin/ColegioGestion" exact component={ColegioGestion} />
+      <Route path="/admin/EstudiantePrincipal" exact component={EstudiantePrincipal} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
