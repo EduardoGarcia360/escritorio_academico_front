@@ -97,7 +97,7 @@ export default function EstudiantePrincipal() {
   };
 
   const irAEditar = (id) => {
-    history.push(`/estudiantes/editar/${id}`);
+    history.push(`/admin/Estudiante/EstudianteGestionar/${id}`);
   };
 
   return (
@@ -239,7 +239,7 @@ export default function EstudiantePrincipal() {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button
-                      className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+                      className="bg-lightBlue-500 text-white px-3 py-1 rounded mr-2"
                       onClick={() => irAEditar(estudiante.id_estudiante)}
                     >
                       Editar
