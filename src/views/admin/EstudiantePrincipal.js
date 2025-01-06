@@ -5,68 +5,30 @@ import { api } from "services/api";
 export default function EstudiantePrincipal() {
   const [hasMounted, setHasMounted] = useState(false);
   const [registros, setRegistros] = useState([]);
-  const [niveles, setNiveles] = useState([]);
-  const [jornadas, setJornadas] = useState([]);
-  const [grados, setGrados] = useState([]);
-  const [secciones, setSecciones] = useState([]);
-  const [idNivel, setIdNivel] = useState("");
-  const [idJornada, setIdJornada] = useState("");
-  const [idGrado, setIdGrado] = useState("");
-  const [seccion, setSeccion] = useState("");
   const history = useHistory();
-
-  const getCatalogos = async () => {
-    try {
-      const nivelResponse = await api.get("niveleducacion");
-      const seccionResponse = await api.get("secciones");
-
-      setNiveles(nivelResponse.data);
-      setSecciones(seccionResponse.data);
-    } catch (error) {
-      console.error("Error al obtener los catálogos:", error);
-    }
-  };
-
-  const getJornadas = async (nivelId) => {
-    try {
-      const jornadaResponse = await api.get(`jornadas/niveleducacion/${nivelId}`);
-      setJornadas(jornadaResponse.data);
-    } catch (error) {
-      console.error("Error al obtener jornadas:", error);
-    }
-  };
-
-  const getGrados = async (jornadaId) => {
-    try {
-      const gradoResponse = await api.get(`grados/jornada/${jornadaId}`);
-      setGrados(gradoResponse.data);
-    } catch (error) {
-      console.error("Error al obtener grados:", error);
-    }
-  };
 
   const getDatos = async () => {
     try {
       const params = {
-        procedureName: "listarestudiantes",
-        params: ["id_colegio", "id_jornada", "id_grado", "seccion"],
-        objParams: {
-          id_jornada: idJornada,
-          id_grado: idGrado,
-          seccion: seccion,
-        },
+        procedureName: "listadoGeneralEstudiantes",
+        params: ["id_colegio"],
+        objParams: {},
       };
       const response = await api.post("execute-procedure", params);
-      console.log("ESTUDIANTES", response);
-      setRegistros(response.data.results);
+      if (response.status === 200) {
+        setRegistros(response.data.results);
+      } else {
+        setRegistros([]);
+      }
     } catch (error) {
       console.error("Error al obtener estudiantes:", error);
+      setRegistros([]);
     }
   };
 
   useEffect(() => {
     if (hasMounted) {
-      getCatalogos(); // Llama al método para obtener los catálogos iniciales
+      getDatos(); // Carga inicial de datos
     }
   }, [hasMounted]);
 
@@ -74,30 +36,56 @@ export default function EstudiantePrincipal() {
     setHasMounted(true);
   }, []);
 
-  const handleNivelChange = (e) => {
-    const nivelId = e.target.value;
-    setIdNivel(nivelId);
-    setJornadas([]);
-    setGrados([]);
-    setIdJornada("");
-    setIdGrado("");
-    if (nivelId) {
-      getJornadas(nivelId);
-    }
-  };
-
-  const handleJornadaChange = (e) => {
-    const jornadaId = e.target.value;
-    setIdJornada(jornadaId);
-    setGrados([]);
-    setIdGrado("");
-    if (jornadaId) {
-      getGrados(jornadaId);
-    }
-  };
-
   const irAEditar = (id) => {
     history.push(`/admin/Estudiante/EstudianteGestionar/${id}`);
+  };
+
+  const irATutores = (id) => {
+    console.log("ruta aqui", id);
+  };
+
+  const eliminarEstudiante = async (id) => {
+    const confirmar = window.confirm(
+      "¿Está seguro que desea eliminar este registro?"
+    );
+    if (confirmar) {
+      try {
+        const objParam = { estado_matricula: "R" };
+        await api.put(`estudiantes/inactivar/${id}`, objParam);
+        alert("Registro eliminado correctamente.");
+        getDatos(); // Refrescar los datos después de eliminar
+      } catch (error) {
+        console.error("Error al eliminar estudiante:", error);
+        alert("Ocurrió un error al intentar eliminar el registro.");
+      }
+    }
+  };
+
+  const renderEstadoMatricula = (estado) => {
+    let colorClass = "";
+    let descripcion = "";
+    switch (estado) {
+      case "A":
+        colorClass = "text-emerald-500";
+        descripcion = "Activo";
+        break;
+      case "R":
+        colorClass = "text-red-500";
+        descripcion = "Retirado";
+        break;
+      case "G":
+        colorClass = "text-orange-500";
+        descripcion = "Graduado";
+        break;
+      default:
+        descripcion = "Desconocido";
+    }
+    return (
+      <span className="flex items-center">
+        <i className={`fas fa-circle ${colorClass} mr-2`}></i>
+        {descripcion}
+      </span>
+    );
   };
 
   return (
@@ -110,83 +98,14 @@ export default function EstudiantePrincipal() {
                 Listado de Estudiantes
               </h3>
             </div>
-          </div>
-          {/* Filtros */}
-          <div className="flex flex-wrap items-center mt-4">
-            <div className="w-1/4 px-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Nivel de Educación
-              </label>
-              <select
-                className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                value={idNivel}
-                onChange={handleNivelChange}
-              >
-                <option value="">Seleccione un nivel</option>
-                {niveles.map((nivel) => (
-                  <option key={nivel.id_nivel} value={nivel.id_nivel}>
-                    {nivel.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-1/4 px-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Jornada
-              </label>
-              <select
-                className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                value={idJornada}
-                onChange={handleJornadaChange}
-              >
-                <option value="">Seleccione una jornada</option>
-                {jornadas.map((jornada) => (
-                  <option key={jornada.id_jornada} value={jornada.id_jornada}>
-                    {jornada.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-1/4 px-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Grado
-              </label>
-              <select
-                className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                value={idGrado}
-                onChange={(e) => setIdGrado(e.target.value)}
-              >
-                <option value="">Seleccione un grado</option>
-                {grados.map((grado) => (
-                  <option key={grado.id_grado} value={grado.id_grado}>
-                    {grado.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-1/4 px-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Sección
-              </label>
-              <select
-                className="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                value={seccion}
-                onChange={(e) => setSeccion(e.target.value)}
-              >
-                <option value="">Seleccione una sección</option>
-                {secciones.map((sec) => (
-                  <option key={sec.nombre} value={sec.nombre}>
-                    {sec.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
             <div className="w-full flex justify-end px-2 mt-4">
               <button
-                className="bg-lightBlue-500 text-white px-4 py-2 rounded flex items-center"
-                onClick={getDatos}
+                className="bg-emerald-500 text-white px-4 py-2 rounded flex items-center ml-2"
+                onClick={() =>
+                  history.push("/admin/Estudiante/EstudianteGestionar")
+                }
               >
-                <i className="fas fa-search mr-2"></i> Buscar
+                Nuevo
               </button>
             </div>
           </div>
@@ -211,6 +130,21 @@ export default function EstudiantePrincipal() {
                   Estado Matrícula
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Jornada Inicio
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Jornada Fin
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Grado
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Sección
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Tutores
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
                 </th>
               </tr>
@@ -220,7 +154,10 @@ export default function EstudiantePrincipal() {
                 <tr key={estudiante.id_estudiante}>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <img
-                      src={estudiante.fotografia || "https://via.placeholder.com/50"}
+                      src={
+                        estudiante.fotografia ||
+                        "https://via.placeholder.com/50"
+                      }
                       alt="Fotografía"
                       className="h-12 w-12 rounded-full border"
                     />
@@ -235,23 +172,48 @@ export default function EstudiantePrincipal() {
                     {estudiante.codigo_estudiante}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {estudiante.estado_matricula}
+                    {renderEstadoMatricula(estudiante.estado_matricula)}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {estudiante.jornada_inicio}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {estudiante.jornada_fin}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {estudiante.grado}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {estudiante.seccion}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button
-                      className="bg-lightBlue-500 text-white px-3 py-1 rounded mr-2"
-                      onClick={() => irAEditar(estudiante.id_estudiante)}
+                      className="flex items-center bg-lightBlue-500 text-white px-3 py-1 rounded-full"
+                      onClick={() => irATutores(estudiante.id_estudiante)}
                     >
-                      Editar
+                      <i className="fas fa-user mr-2"></i>
+                      {estudiante.cantidad_tutores}
                     </button>
-                    <button
-                      className="bg-red-500 text-white px-3 py-1 rounded"
-                      onClick={() =>
-                        console.log(`Eliminar ${estudiante.id_estudiante}`)
-                      }
-                    >
-                      Eliminar
-                    </button>
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {estudiante.estado_matricula === "A" && (
+                      <button
+                        className="bg-lightBlue-500 text-white px-3 py-1 rounded mr-2"
+                        onClick={() => irAEditar(estudiante.id_estudiante)}
+                      >
+                        Editar
+                      </button>
+                    )}
+                    {estudiante.estado_matricula === "A" && (
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded"
+                        onClick={() =>
+                          eliminarEstudiante(estudiante.id_estudiante)
+                        }
+                      >
+                        Eliminar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

@@ -35,13 +35,15 @@ export default function EstudianteGestionar() {
 
     try {
       if (id) {
-        await api.put(`estudiantes/${id}`, formData);
+        const response = await api.put(`estudiantes/${id}`, formData);
+        console.log('nuevo', response)
         alert('Registro actualizado exitosamente');
       } else {
-        await api.post('estudiantes/', formData);
+        const response = await api.post('estudiantes/', formData);
+        console.log('actualizar', response)
         alert('Registro creado exitosamente');
       }
-      history.push('/estudiantes');
+      history.push('/admin/EstudiantePrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');
@@ -53,10 +55,18 @@ export default function EstudianteGestionar() {
       const fetchData = async () => {
         try {
           const response = await api.get(`estudiantes/${id}`);
-          setFormData(response.data);
+          console.log('response', response)
+          if (response.data) {
+            setFormData(response.data);
+          } else {
+            console.error('Estudiante no encontrado');
+            alert('Ocurrió un error al cargar los datos');
+            history.push('/admin/EstudiantePrincipal');
+          }
         } catch (error) {
           console.error('Error al cargar los datos:', error);
           alert('Ocurrió un error al cargar los datos');
+          history.push('/admin/EstudiantePrincipal');
         }
       };
       fetchData();
