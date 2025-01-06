@@ -23,6 +23,8 @@ import TutorPrincipal from "views/admin/Tutores/TutorPrincipal.js";
 import TutorGestionar from "views/admin/Tutores/TutorGestionar.js";
 import NivelEducacionPrincipal from "views/admin/NivelEducacion/NivelEducacionPrincipal.js";
 import NivelEducacionGestionar from "views/admin/NivelEducacion/NivelEducacionGestionar.js";
+import CicloEscolarPrincipal from "views/admin/CicloEscolar/CicloEscolarPrincipal.js";
+import CicloEscolarGestionar from "views/admin/CicloEscolar/CicloEscolarGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -41,6 +43,8 @@ ReactDOM.render(
       <Route path="/admin/Tutores/TutorGestionar/:id/tutor/:idTutor?" exact component={TutorGestionar} />
       <Route path="/admin/NivelEducacion/NivelEducacionPrincipal" exact component={NivelEducacionPrincipal} />
       <Route path="/admin/NivelEducacion/NivelEducacionGestionar/:id?" exact component={NivelEducacionGestionar} />
+      <Route path="/admin/CicloEscolar/CicloEscolarPrincipal" exact component={CicloEscolarPrincipal} />
+      <Route path="/admin/CicloEscolar/CicloEscolarGestionar/:id?" exact component={CicloEscolarGestionar} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
