@@ -17,6 +17,8 @@ import Tables from "views/admin/Tables.js";
 import ColegioGestion from "views/admin/ColegioGestion.js";
 import EstudiantePrincipal from "views/admin/EstudiantePrincipal.js";
 import EstudianteGestionar from "views/admin/Estudiante/EstudianteGestionar.js";
+import TutorPrincipal from "views/admin/Tutores/TutorPrincipal.js";
+import TutorGestionar from "views/admin/Tutores/TutorGestionar.js";
 
 export default function Admin() {
   return (
@@ -35,6 +37,8 @@ export default function Admin() {
             <Route path="/admin/ColegioGestion" exact component={ColegioGestion} />
             <Route path="/admin/EstudiantePrincipal" exact component={EstudiantePrincipal} />
             <Route path="/admin/Estudiante/EstudianteGestionar/:id?" exact component={EstudianteGestionar} />
+            <Route path="/admin/Tutores/TutorPrincipal/:id" exact component={TutorPrincipal} />
+            <Route path="/admin/Tutores/TutorGestionar/:id/tutor/:idTutor?" exact component={TutorGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />

@@ -42,6 +42,7 @@ export default function EstudiantePrincipal() {
 
   const irATutores = (id) => {
     console.log("ruta aqui", id);
+    history.push(`/admin/Tutores/TutorPrincipal/${id}`);
   };
 
   const eliminarEstudiante = async (id) => {
