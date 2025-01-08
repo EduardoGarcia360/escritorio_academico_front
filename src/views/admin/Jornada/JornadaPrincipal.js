@@ -1,49 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { api } from "services/api";
 
-export default function NivelEducacionPrincipal() {
-  const [niveles, setNiveles] = useState([]);
+export default function JornadaPrincipal() {
+  const [jornadas, setJornadas] = useState([]);
+  const { id } = useParams();
   const history = useHistory();
 
   useEffect(() => {
-    const fetchNiveles = async () => {
+    if (!id) {
+      alert("Nivel de educación no encontrado");
+      history.push("/admin/NivelEducacion/NivelEducacionPrincipal");
+      return;
+    }
+
+    const fetchJornadas = async () => {
       try {
-        const response = await api.get("niveleducacion/");
-        setNiveles(response.data);
+        const response = await api.get(`jornadas/niveleducacion/${id}`);
+        console.log('response', response)
+        setJornadas(response.data);
       } catch (error) {
-        console.error("Error al obtener los niveles de educación:", error);
-        alert("No se pudieron cargar los niveles de educación.");
+        console.error("Error al obtener las jornadas:", error);
+        alert("No se pudieron cargar las jornadas.");
+        history.push("/admin/NivelEducacion/NivelEducacionPrincipal");
       }
     };
 
-    fetchNiveles();
-  }, []);
+    fetchJornadas();
+  }, [id, history]);
+
+  
 
   const handleNuevo = () => {
-    history.push("/admin/NivelEducacion/NivelEducacionGestionar");
+    history.push(`/admin/Jornada/JornadaGestionar/${id}/jornada/`);
   };
 
-  const handleEditar = (id) => {
-    history.push(`/admin/NivelEducacion/NivelEducacionGestionar/${id}`);
+  const handleEditar = (jornadaId) => {
+    history.push(`/admin/Jornada/JornadaGestionar/${id}/jornada/${jornadaId}`);
   };
 
-  const handleEliminar = async (id) => {
+  const handleEliminar = async (jornadaId) => {
     const confirmar = window.confirm("¿Está seguro que desea eliminar este registro?");
     if (confirmar) {
       try {
-        await api.delete(`niveleducacion/${id}`);
-        alert("Nivel de educación eliminado correctamente.");
-        setNiveles((prevNiveles) => prevNiveles.filter((nivel) => nivel.id_nivel !== id));
+        const response = await api.delete(`jornadas/${jornadaId}`);
+        console.log('response', response)
+        if (response.status === 200) {
+            alert("Jornada eliminada correctamente.");
+            setJornadas((prevJornadas) => prevJornadas.filter((jornada) => jornada.id_jornada !== jornadaId));
+        } else {
+            alert(response.data.message);
+        }
       } catch (error) {
-        console.error("Error al eliminar nivel de educación:", error);
-        alert("Ocurrió un error al intentar eliminar el nivel de educación.");
+        console.error("Error al eliminar jornada:", error);
+        alert("Ocurrió un error al intentar eliminar la jornada.");
       }
     }
   };
 
-  const handleVerJornadas = (id) => {
-    history.push(`/admin/Jornada/JornadaPrincipal/${id}`);
+  const handleRegresar = () => {
+    history.push("/admin/NivelEducacion/NivelEducacionPrincipal");
   };
 
   return (
@@ -53,7 +69,7 @@ export default function NivelEducacionPrincipal() {
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
               <h3 className="font-semibold text-lg text-blueGray-700">
-                Listado de Niveles de Educación
+                Listado de Jornadas
               </h3>
             </div>
             <div className="w-full flex justify-end px-2 mt-4">
@@ -61,7 +77,13 @@ export default function NivelEducacionPrincipal() {
                 className="bg-emerald-500 text-white px-4 py-2 rounded flex items-center ml-2"
                 onClick={handleNuevo}
               >
-                Nuevo Nivel
+                Nueva Jornada
+              </button>
+              <button
+                className="bg-lightBlue-500 text-white px-4 py-2 rounded flex items-center ml-2"
+                onClick={handleRegresar}
+              >
+                Regresar
               </button>
             </div>
           </div>
@@ -74,13 +96,13 @@ export default function NivelEducacionPrincipal() {
                   Nombre
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Descripción
+                  Horario Inicio
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Horario Fin
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Fecha Creación
-                </th>
-                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Jornadas
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
@@ -88,36 +110,30 @@ export default function NivelEducacionPrincipal() {
               </tr>
             </thead>
             <tbody>
-              {niveles.map((nivel) => (
-                <tr key={nivel.id_nivel}>
+              {jornadas.map((jornada) => (
+                <tr key={jornada.id_jornada}>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {nivel.nombre}
+                    {jornada.nombre}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {nivel.descripcion}
+                    {jornada.horario_inicio}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {new Date(nivel.createdAt).toLocaleDateString()}
+                    {jornada.horario_fin}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    <button
-                      className="bg-lightBlue-500 text-white px-3 py-1 rounded-full flex items-center"
-                      onClick={() => handleVerJornadas(nivel.id_nivel)}
-                    >
-                      <i className="fas fa-stopwatch mr-2"></i>
-                      {nivel.cantidad_jornada}
-                    </button>
+                    {jornada.createdAt}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button
                       className="bg-lightBlue-500 text-white px-3 py-1 rounded mr-2"
-                      onClick={() => handleEditar(nivel.id_nivel)}
+                      onClick={() => handleEditar(jornada.id_jornada)}
                     >
                       Editar
                     </button>
                     <button
                       className="bg-red-500 text-white px-3 py-1 rounded"
-                      onClick={() => handleEliminar(nivel.id_nivel)}
+                      onClick={() => handleEliminar(jornada.id_jornada)}
                     >
                       Eliminar
                     </button>
