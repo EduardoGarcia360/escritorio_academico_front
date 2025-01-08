@@ -40,9 +40,13 @@ export default function GradoPrincipal() {
     const confirmar = window.confirm("¿Está seguro que desea eliminar este grado?");
     if (confirmar) {
       try {
-        await api.delete(`grados/${gradoId}`);
-        alert("Grado eliminado correctamente.");
-        setGrados((prevGrados) => prevGrados.filter((grado) => grado.id_grado !== gradoId));
+        const response = await api.delete(`grados/${gradoId}`);
+        if (response.status === 200) {
+            alert("Grado eliminado correctamente.");
+            setGrados((prevGrados) => prevGrados.filter((grado) => grado.id_grado !== gradoId));
+        } else {
+            alert(response.data.message)
+        }
       } catch (error) {
         console.error("Error al eliminar el grado:", error);
         alert("Ocurrió un error al intentar eliminar el grado.");
