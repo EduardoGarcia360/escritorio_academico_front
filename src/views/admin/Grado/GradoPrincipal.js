@@ -58,6 +58,10 @@ export default function GradoPrincipal() {
     history.push(`/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal/${idCiclo}`);
   };
 
+  const handleVerEstudiantes = (id_grado) => {
+    history.push(`/admin/AsignarEstudiante/AsignarEstudiantePrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${id_grado}`)
+  };
+
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
@@ -92,7 +96,13 @@ export default function GradoPrincipal() {
                   Nombre
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Sección
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Descripción
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Estudiantes
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
@@ -106,7 +116,19 @@ export default function GradoPrincipal() {
                     {grado.nombre}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {grado.seccion}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {grado.descripcion}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    <button
+                      className="bg-lightBlue-500 text-white px-3 py-1 rounded-full flex items-center"
+                      onClick={() => handleVerEstudiantes(grado.id_grado)}
+                    >
+                      <i className="fas fa-star mr-2"></i>
+                      {grado.cantidad_estudiantes}
+                    </button>
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button

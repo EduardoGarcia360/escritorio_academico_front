@@ -29,6 +29,8 @@ import CicloJornadaPrincipal from "views/admin/CicloEscolarJornada/CicloEscolarJ
 import CicloJornadaGestionar from "views/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar.js";
 import GradoPrincipal from "views/admin/Grado/GradoPrincipal.js";
 import GradoGestionar from "views/admin/Grado/GradoGestionar.js";
+import AsignarEstudiantePrincipal from "views/admin/AsignarEstudiante/AsignarEstudiantePrincipal.js";
+import AsignarEstudianteGestionar from "views/admin/AsignarEstudiante/AsignarEstudianteGestionar.js";
 
 export default function Admin() {
   return (
@@ -59,6 +61,8 @@ export default function Admin() {
             <Route path="/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar/:id" exact component={CicloJornadaGestionar} />
             <Route path="/admin/Grado/GradoPrincipal/:idCiclo/jornada/:idJornadaCiclo" exact component={GradoPrincipal} />
             <Route path="/admin/Grado/GradoGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado?" exact component={GradoGestionar} />
+            <Route path="/admin/AsignarEstudiante/AsignarEstudiantePrincipal/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" exact component={AsignarEstudiantePrincipal} />
+            <Route path="/admin/AsignarEstudiante/AsignarEstudianteGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" exact component={AsignarEstudianteGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />
