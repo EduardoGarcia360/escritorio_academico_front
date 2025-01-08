@@ -25,6 +25,8 @@ import CicloEscolarPrincipal from "views/admin/CicloEscolar/CicloEscolarPrincipa
 import CicloEscolarGestionar from "views/admin/CicloEscolar/CicloEscolarGestionar.js";
 import JornadaPrincipal from "views/admin/Jornada/JornadaPrincipal.js";
 import JornadaGestionar from "views/admin/Jornada/JornadaGestionar.js";
+import CicloJornadaPrincipal from "views/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal.js";
+import CicloJornadaGestionar from "views/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar.js";
 
 export default function Admin() {
   return (
@@ -51,6 +53,8 @@ export default function Admin() {
             <Route path="/admin/CicloEscolar/CicloEscolarGestionar/:id?" exact component={CicloEscolarGestionar} />
             <Route path="/admin/Jornada/JornadaPrincipal/:id" exact component={JornadaPrincipal} />
             <Route path="/admin/Jornada/JornadaGestionar/:id/jornada/:idJornada?" exact component={JornadaGestionar} />
+            <Route path="/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal/:id" exact component={CicloJornadaPrincipal} />
+            <Route path="/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar/:id" exact component={CicloJornadaGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />

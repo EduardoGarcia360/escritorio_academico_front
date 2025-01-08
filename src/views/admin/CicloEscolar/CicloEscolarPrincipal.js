@@ -75,6 +75,10 @@ export default function CicloEscolarPrincipal() {
     );
   };
 
+  const handleVerJornadas = (id) => {
+    history.push(`/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal/${id}`);
+  };
+
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
@@ -115,6 +119,9 @@ export default function CicloEscolarPrincipal() {
                   Fecha Creación
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Jornadas
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
                 </th>
               </tr>
@@ -136,6 +143,15 @@ export default function CicloEscolarPrincipal() {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {adjustDate(ciclo.createdAt)}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    <button
+                      className="bg-lightBlue-500 text-white px-3 py-1 rounded-full flex items-center"
+                      onClick={() => handleVerJornadas(ciclo.id_ciclo)}
+                    >
+                      <i className="fas fa-calendar-alt mr-2"></i>
+                      {ciclo.cantidad_jornadas}
+                    </button>
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {ciclo.estado === "A" && (
