@@ -2,65 +2,56 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { api } from "services/api";
 
-export default function CicloJornadaPrincipal() {
-  const [jornadas, setJornadas] = useState([]);
-  const { id } = useParams();
+export default function GradoPrincipal() {
+  const [grados, setGrados] = useState([]);
+  const { idCiclo, idJornadaCiclo } = useParams();
   const history = useHistory();
 
   useEffect(() => {
-    if (!id) {
-      alert("Ciclo escolar no encontrado");
+    if (!idCiclo || !idJornadaCiclo) {
+      alert("Información de Ciclo Escolar o Jornada no encontrada");
       history.push("/admin/CicloEscolar/CicloEscolarPrincipal");
       return;
     }
 
-    const fetchJornadas = async () => {
+    const fetchGrados = async () => {
       try {
-        const params = {
-          procedureName: "listadoJornadaCicloEscolar",
-          params: ["id_ciclo"],
-          objParams: { id_ciclo: id },
-        };
-        const response = await api.post("execute-procedure", params);
-        setJornadas(response.data.results);
+        const response = await api.get(`grados/jornadaciclo/${idJornadaCiclo}`);
+        setGrados(response.data);
       } catch (error) {
-        console.error("Error al obtener las jornadas del ciclo escolar:", error);
-        alert("No se pudieron cargar las jornadas del ciclo escolar.");
+        console.error("Error al obtener los grados:", error);
+        alert("No se pudieron cargar los grados.");
         history.push("/admin/CicloEscolar/CicloEscolarPrincipal");
       }
     };
 
-    fetchJornadas();
-  }, [id, history]);
+    fetchGrados();
+  }, [idCiclo, idJornadaCiclo, history]);
 
   const handleNuevo = () => {
-    history.push(`/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar/${id}`);
+    history.push(`/admin/Grado/GradoGestionar/${idCiclo}/jornada/${idJornadaCiclo}/grado/`);
   };
 
-  const handleEliminar = async (jornadaId) => {
-    const confirmar = window.confirm("¿Está seguro que desea eliminar esta jornada?");
+  const handleEditar = (gradoId) => {
+    history.push(`/admin/Grado/GradoGestionar/${idCiclo}/jornada/${idJornadaCiclo}/grado/${gradoId}`);
+  };
+
+  const handleEliminar = async (gradoId) => {
+    const confirmar = window.confirm("¿Está seguro que desea eliminar este grado?");
     if (confirmar) {
       try {
-        const response = await api.delete(`jornadacicloescolar/${jornadaId}`);
-        if (response.status === 200) {
-            alert("Jornada eliminada correctamente.");
-            setJornadas((prevJornadas) => prevJornadas.filter((jornada) => jornada.id_jornada_ciclo !== jornadaId));
-        } else {
-            alert(response.data.message)
-        }
+        await api.delete(`grados/${gradoId}`);
+        alert("Grado eliminado correctamente.");
+        setGrados((prevGrados) => prevGrados.filter((grado) => grado.id_grado !== gradoId));
       } catch (error) {
-        console.error("Error al eliminar la jornada:", error);
-        alert("Ocurrió un error al intentar eliminar la jornada.");
+        console.error("Error al eliminar el grado:", error);
+        alert("Ocurrió un error al intentar eliminar el grado.");
       }
     }
   };
 
   const handleRegresar = () => {
-    history.push("/admin/CicloEscolar/CicloEscolarPrincipal");
-  };
-
-  const handleVerGrados = (id_jornada_ciclo) => {
-    history.push(`/admin/Grado/GradoPrincipal/${id}/jornada/${id_jornada_ciclo}`);
+    history.push(`/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal/${idCiclo}`);
   };
 
   return (
@@ -70,7 +61,7 @@ export default function CicloJornadaPrincipal() {
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
               <h3 className="font-semibold text-lg text-blueGray-700">
-                Jornadas del Ciclo Escolar
+                Listado de Grados
               </h3>
             </div>
             <div className="w-full flex justify-end px-2 mt-4">
@@ -78,7 +69,7 @@ export default function CicloJornadaPrincipal() {
                 className="bg-emerald-500 text-white px-4 py-2 rounded flex items-center ml-2"
                 onClick={handleNuevo}
               >
-                Nueva Jornada
+                Nuevo Grado
               </button>
               <button
                 className="bg-lightBlue-500 text-white px-4 py-2 rounded flex items-center ml-2"
@@ -94,10 +85,10 @@ export default function CicloJornadaPrincipal() {
             <thead>
               <tr>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Jornada Asignada
+                  Nombre
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Grados
+                  Descripción
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
@@ -105,24 +96,24 @@ export default function CicloJornadaPrincipal() {
               </tr>
             </thead>
             <tbody>
-              {jornadas.map((jornada) => (
-                <tr key={jornada.id_jornada_ciclo}>
+              {grados.map((grado) => (
+                <tr key={grado.id_grado}>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {jornada.desc_jornada}
+                    {grado.nombre}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {grado.descripcion}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button
-                      className="bg-lightBlue-500 text-white px-3 py-1 rounded-full flex items-center"
-                      onClick={() => handleVerGrados(jornada.id_jornada_ciclo)}
+                      className="bg-lightBlue-500 text-white px-3 py-1 rounded mr-2"
+                      onClick={() => handleEditar(grado.id_grado)}
                     >
-                      <i className="fas fa-star mr-2"></i>
-                      {jornada.cantidad_grados}
+                      Editar
                     </button>
-                  </td>
-                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button
                       className="bg-red-500 text-white px-3 py-1 rounded"
-                      onClick={() => handleEliminar(jornada.id_jornada_ciclo)}
+                      onClick={() => handleEliminar(grado.id_grado)}
                     >
                       Eliminar
                     </button>

@@ -29,6 +29,8 @@ import JornadaPrincipal from "views/admin/Jornada/JornadaPrincipal.js";
 import JornadaGestionar from "views/admin/Jornada/JornadaGestionar.js";
 import CicloJornadaPrincipal from "views/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal.js";
 import CicloJornadaGestionar from "views/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar.js";
+import GradoPrincipal from "views/admin/Grado/GradoPrincipal.js";
+import GradoGestionar from "views/admin/Grado/GradoGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -53,6 +55,8 @@ ReactDOM.render(
       <Route path="/admin/Jornada/JornadaGestionar/:id/jornada/:idJornada?" exact component={JornadaGestionar} />
       <Route path="/admin/CicloEscolarJornada/CicloEscolarJornadaPrincipal/:id" exact component={CicloJornadaPrincipal} />
       <Route path="/admin/CicloEscolarJornada/CicloEscolarJornadaGestionar/:id" exact component={CicloJornadaGestionar} />
+      <Route path="/admin/Grado/GradoPrincipal/:idCiclo/jornada/:idJornadaCiclo" exact component={GradoPrincipal} />
+      <Route path="/admin/Grado/GradoGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado?" exact component={GradoGestionar} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
