@@ -33,6 +33,8 @@ import GradoPrincipal from "views/admin/Grado/GradoPrincipal.js";
 import GradoGestionar from "views/admin/Grado/GradoGestionar.js";
 import AsignarEstudiantePrincipal from "views/admin/AsignarEstudiante/AsignarEstudiantePrincipal.js";
 import AsignarEstudianteGestionar from "views/admin/AsignarEstudiante/AsignarEstudianteGestionar.js";
+import PersonalDocentePrincipal from "views/admin/PersonalDocente/PersonalDocentePrincipal.js";
+import PersonalDocenteGestionar from "views/admin/PersonalDocente/PersonalDocenteGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -61,6 +63,8 @@ ReactDOM.render(
       <Route path="/admin/Grado/GradoGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado?" exact component={GradoGestionar} />
       <Route path="/admin/AsignarEstudiante/AsignarEstudiantePrincipal/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" exact component={AsignarEstudiantePrincipal} />
       <Route path="/admin/AsignarEstudiante/AsignarEstudianteGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" exact component={AsignarEstudianteGestionar} />
+      <Route path="/admin/PersonalDocente/PersonalDocentePrincipal" exact component={PersonalDocentePrincipal} />
+      <Route path="/admin/PersonalDocente/PersonalDocenteGestionar/:id?" exact component={PersonalDocenteGestionar} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
