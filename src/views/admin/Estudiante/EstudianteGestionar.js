@@ -30,20 +30,38 @@ export default function EstudianteGestionar() {
     });
   };
 
+  const generarCuotas = async (id_estudiante) => {
+    const params = {
+      procedureName: "GenerarCuotasEstudiante",
+      params: ["id_estudiante", "id_colegio", "id"],
+      objParams: { id_estudiante: id_estudiante }
+    };
+    const response = await api.post("execute-procedure", params);
+    console.log('generarCuotas', response)
+    history.push('/admin/EstudiantePrincipal');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       if (id) {
         const response = await api.put(`estudiantes/${id}`, formData);
-        console.log('nuevo', response)
-        alert('Registro actualizado exitosamente');
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/EstudiantePrincipal');
+        }
       } else {
         const response = await api.post('estudiantes/', formData);
-        console.log('actualizar', response)
-        alert('Registro creado exitosamente');
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          generarCuotas(response.data.id_estudiante)
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push('/admin/EstudiantePrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');
@@ -82,7 +100,7 @@ export default function EstudianteGestionar() {
         <form id="estudiante" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre_completo" className="block text-sm font-medium text-gray-700">
-              Nombre Completo
+              Nombre Completo <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -97,7 +115,7 @@ export default function EstudianteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700">
-              Fecha de Nacimiento
+              Fecha de Nacimiento <span className="text-red-500">(*)</span>
             </label>
             <input
               type="date"
@@ -110,7 +128,7 @@ export default function EstudianteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="identificacion" className="block text-sm font-medium text-gray-700">
-              Identificación
+              Identificación <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -163,7 +181,6 @@ export default function EstudianteGestionar() {
               onChange={handleChange}
               maxLength="100"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              required
             />
           </div>
           <div className="mb-4">
@@ -212,7 +229,7 @@ export default function EstudianteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="codigo_estudiante" className="block text-sm font-medium text-gray-700">
-              Código del Estudiante
+              Código del Estudiante <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -226,7 +243,7 @@ export default function EstudianteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="sexo" className="block text-sm font-medium text-gray-700">
-              Sexo
+              Sexo <span className="text-red-500">(*)</span>
             </label>
             <select
               id="sexo"
@@ -234,6 +251,7 @@ export default function EstudianteGestionar() {
               value={formData.sexo}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             >
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
