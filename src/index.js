@@ -39,6 +39,8 @@ import AsignarMaestroPrincipal from "views/admin/AsignarMaestro/AsignarMaestroPr
 import AsignarMaestroGestionar from "views/admin/AsignarMaestro/AsignarMaestroGestionar.js";
 import CuotaColegioPrincipal from "views/admin/CuotaColegio/CuotaColegioPrincipal.js";
 import CuotaColegioGestionar from "views/admin/CuotaColegio/CuotaColegioGestionar.js";
+import CuotaEstudiantePrincipal from "views/admin/CuotaEstudiante/CuotaEstudiantePrincipal.js";
+// import CuotaEstudianteGestionar from "views/admin/CuotaEstudiante/CuotaEstudianteGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -73,6 +75,16 @@ ReactDOM.render(
       <Route path="/admin/AsignarMaestro/AsignarMaestroGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" exact component={AsignarMaestroGestionar} />
       <Route path="/admin/CuotaColegio/CuotaColegioPrincipal" exact component={CuotaColegioPrincipal} />
       <Route path="/admin/CuotaColegio/CuotaColegioGestionar/:id?" exact component={CuotaColegioGestionar} />
+      <Route 
+        path="/admin/CuotaEstudiante/CuotaEstudiantePrincipal/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/estudiante/:idEstudiante" 
+        exact 
+        component={CuotaEstudiantePrincipal} 
+      />
+      {/* <Route 
+        path="/admin/CuotaEstudiante/CuotaEstudianteGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/estudiante/:idEstudiante/cuota/:idCuota" 
+        exact 
+        component={CuotaEstudianteGestionar} 
+      /> */}
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
