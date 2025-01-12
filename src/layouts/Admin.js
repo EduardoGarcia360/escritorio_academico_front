@@ -41,6 +41,8 @@ import CuotaEstudiantePrincipal from "views/admin/CuotaEstudiante/CuotaEstudiant
 // import CuotaEstudianteGestionar from "views/admin/CuotaEstudiante/CuotaEstudianteGestionar.js";
 import BancoPrincipal from "views/admin/Banco/BancoPrincipal.js";
 import BancoGestionar from "views/admin/Banco/BancoGestionar.js";
+import CuentaBancariaPrincipal from "views/admin/CuentaBancaria/CuentaBancariaPrincipal.js";
+import CuentaBancariaGestionar from "views/admin/CuentaBancaria/CuentaBancariaGestionar.js";
 
 export default function Admin() {
   return (
@@ -91,6 +93,8 @@ export default function Admin() {
             /> */}
             <Route path="/admin/Banco/BancoPrincipal" exact component={BancoPrincipal} />
             <Route path="/admin/Banco/BancoGestionar/:id?" exact component={BancoGestionar} />
+            <Route path="/admin/CuentaBancaria/CuentaBancariaPrincipal" exact component={CuentaBancariaPrincipal} />
+            <Route path="/admin/CuentaBancaria/CuentaBancariaGestionar/:id?" exact component={CuentaBancariaGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />

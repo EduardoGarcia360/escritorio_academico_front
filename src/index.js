@@ -43,6 +43,8 @@ import CuotaEstudiantePrincipal from "views/admin/CuotaEstudiante/CuotaEstudiant
 // import CuotaEstudianteGestionar from "views/admin/CuotaEstudiante/CuotaEstudianteGestionar.js";
 import BancoPrincipal from "views/admin/Banco/BancoPrincipal.js";
 import BancoGestionar from "views/admin/Banco/BancoGestionar.js";
+import CuentaBancariaPrincipal from "views/admin/CuentaBancaria/CuentaBancariaPrincipal.js";
+import CuentaBancariaGestionar from "views/admin/CuentaBancaria/CuentaBancariaGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -89,6 +91,8 @@ ReactDOM.render(
       /> */}
       <Route path="/admin/Banco/BancoPrincipal" exact component={BancoPrincipal} />
       <Route path="/admin/Banco/BancoGestionar/:id?" exact component={BancoGestionar} />
+      <Route path="/admin/CuentaBancaria/CuentaBancariaPrincipal" exact component={CuentaBancariaPrincipal} />
+      <Route path="/admin/CuentaBancaria/CuentaBancariaGestionar/:id?" exact component={CuentaBancariaGestionar} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
