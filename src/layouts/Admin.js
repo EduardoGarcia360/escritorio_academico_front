@@ -39,6 +39,8 @@ import CuotaColegioPrincipal from "views/admin/CuotaColegio/CuotaColegioPrincipa
 import CuotaColegioGestionar from "views/admin/CuotaColegio/CuotaColegioGestionar.js";
 import CuotaEstudiantePrincipal from "views/admin/CuotaEstudiante/CuotaEstudiantePrincipal.js";
 // import CuotaEstudianteGestionar from "views/admin/CuotaEstudiante/CuotaEstudianteGestionar.js";
+import BancoPrincipal from "views/admin/Banco/BancoPrincipal.js";
+import BancoGestionar from "views/admin/Banco/BancoGestionar.js";
 
 export default function Admin() {
   return (
@@ -87,6 +89,8 @@ export default function Admin() {
               exact 
               component={CuotaEstudianteGestionar} 
             /> */}
+            <Route path="/admin/Banco/BancoPrincipal" exact component={BancoPrincipal} />
+            <Route path="/admin/Banco/BancoGestionar/:id?" exact component={BancoGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />
