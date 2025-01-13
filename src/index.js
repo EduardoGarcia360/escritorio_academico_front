@@ -40,11 +40,11 @@ import AsignarMaestroGestionar from "views/admin/AsignarMaestro/AsignarMaestroGe
 import CuotaColegioPrincipal from "views/admin/CuotaColegio/CuotaColegioPrincipal.js";
 import CuotaColegioGestionar from "views/admin/CuotaColegio/CuotaColegioGestionar.js";
 import CuotaEstudiantePrincipal from "views/admin/CuotaEstudiante/CuotaEstudiantePrincipal.js";
-// import CuotaEstudianteGestionar from "views/admin/CuotaEstudiante/CuotaEstudianteGestionar.js";
 import BancoPrincipal from "views/admin/Banco/BancoPrincipal.js";
 import BancoGestionar from "views/admin/Banco/BancoGestionar.js";
 import CuentaBancariaPrincipal from "views/admin/CuentaBancaria/CuentaBancariaPrincipal.js";
 import CuentaBancariaGestionar from "views/admin/CuentaBancaria/CuentaBancariaGestionar.js";
+import PagoCuotaGestionar from "views/admin/PagoCuota/PagoCuotaGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -84,11 +84,11 @@ ReactDOM.render(
         exact 
         component={CuotaEstudiantePrincipal} 
       />
-      {/* <Route 
-        path="/admin/CuotaEstudiante/CuotaEstudianteGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/estudiante/:idEstudiante/cuota/:idCuota" 
+      <Route 
+        path="/admin/PagoCuota/PagoCuotaGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/estudiante/:idEstudiante/cuota/:idCuota" 
         exact 
-        component={CuotaEstudianteGestionar} 
-      /> */}
+        component={PagoCuotaGestionar} 
+      />
       <Route path="/admin/Banco/BancoPrincipal" exact component={BancoPrincipal} />
       <Route path="/admin/Banco/BancoGestionar/:id?" exact component={BancoGestionar} />
       <Route path="/admin/CuentaBancaria/CuentaBancariaPrincipal" exact component={CuentaBancariaPrincipal} />

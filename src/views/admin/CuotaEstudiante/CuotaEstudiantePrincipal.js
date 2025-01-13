@@ -33,7 +33,7 @@ export default function CuotaEstudiantePrincipal() {
   };
 
   const handleGestionar = (idCuota) => {
-    history.push(`/admin/CuotaEstudiante/CuotaEstudianteGestionar/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/estudiante/${idEstudiante}/cuota/${idCuota}`);
+    history.push(`/admin/PagoCuota/PagoCuotaGestionar/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/estudiante/${idEstudiante}/cuota/${idCuota}`);
   };
 
   const adjustDate = (dateString) => {
@@ -133,10 +133,10 @@ export default function CuotaEstudiantePrincipal() {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button
-                      className="bg-lightBlue-500 text-white px-3 py-1 rounded"
+                      className={`${cuota.estado === 'G' ? 'bg-emerald-500' : 'bg-orange-500' } text-white px-3 py-1 rounded`}
                       onClick={() => handleGestionar(cuota.id_cuota_estudiante)}
                     >
-                      Gestionar
+                      { cuota.estado === 'G' ? 'Visualizar' : 'Gestionar' }
                     </button>
                   </td>
                 </tr>
