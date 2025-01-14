@@ -66,6 +66,10 @@ export default function GradoPrincipal() {
     history.push(`/admin/AsignarMaestro/AsignarMaestroPrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${id_grado}`)
   };
 
+  const handleVerActividades = (id_grado) => {
+    history.push(`/admin/AsignarActividad/AsignarActividadPrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${id_grado}`)
+  };
+
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
@@ -112,6 +116,9 @@ export default function GradoPrincipal() {
                   Maestros
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Actividades
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
                 </th>
               </tr>
@@ -144,6 +151,15 @@ export default function GradoPrincipal() {
                     >
                       <i className="fas fa-star mr-2"></i>
                       {grado.cantidad_maestros}
+                    </button>
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    <button
+                      className="bg-orange-500 text-white px-3 py-1 rounded-full flex items-center"
+                      onClick={() => handleVerActividades(grado.id_grado)}
+                    >
+                      <i className="fas fa-star mr-2"></i>
+                      {grado.cantidad_actividades}
                     </button>
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">

@@ -47,6 +47,8 @@ import CuentaBancariaGestionar from "views/admin/CuentaBancaria/CuentaBancariaGe
 import PagoCuotaGestionar from "views/admin/PagoCuota/PagoCuotaGestionar.js";
 import GastoExtraPrincipal from "views/admin/GastoExtra/GastoExtraPrincipal.js";
 import GastoExtraGestionar from "views/admin/GastoExtra/GastoExtraGestionar.js";
+import AsignarActividadPrincipal from "views/admin/AsignarActividad/AsignarActividadPrincipal.js";
+import AsignarActividadGestionar from "views/admin/AsignarActividad/AsignarActividadGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -97,6 +99,16 @@ ReactDOM.render(
       <Route path="/admin/CuentaBancaria/CuentaBancariaGestionar/:id?" exact component={CuentaBancariaGestionar} />
       <Route path="/admin/GastoExtra/GastoExtraPrincipal" exact component={GastoExtraPrincipal} />
       <Route path="/admin/GastoExtra/GastoExtraGestionar/:id?" exact component={GastoExtraGestionar} />
+      <Route 
+        path="/admin/AsignarActividad/AsignarActividadPrincipal/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" 
+        exact 
+        component={AsignarActividadPrincipal} 
+      />
+      <Route 
+        path="/admin/AsignarActividad/AsignarActividadGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado" 
+        exact 
+        component={AsignarActividadGestionar} 
+      />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
