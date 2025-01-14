@@ -273,6 +273,28 @@ export default function Sidebar() {
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/GastoExtra/GastoExtraPrincipal") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/GastoExtra/GastoExtraPrincipal"
+                >
+                  <i
+                    className={
+                      "fas fa-solid fa-star mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/GastoExtra/GastoExtraPrincipal") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Gasto Extraordinario
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/admin/EstudiantePrincipal") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
