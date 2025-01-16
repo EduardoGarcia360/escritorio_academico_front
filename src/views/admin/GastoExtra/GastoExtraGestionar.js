@@ -11,6 +11,7 @@ export default function GastoExtraGestionar() {
     monto: '',
     fecha_gasto: '',
     descripcion: '',
+    es_actividad_bus: false,
   });
 
   useEffect(() => {
@@ -29,10 +30,10 @@ export default function GastoExtraGestionar() {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
     });
   };
 
@@ -121,6 +122,19 @@ export default function GastoExtraGestionar() {
               onChange={handleChange}
               maxLength="255"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="es_actividad_bus" className="block text-sm font-medium text-gray-700">
+              ¿Requiere Bus?
+            </label>
+            <input
+              type="checkbox"
+              id="es_actividad_bus"
+              name="es_actividad_bus"
+              checked={formData.es_actividad_bus}
+              onChange={handleChange}
+              className="mt-1"
             />
           </div>
           <div className="flex items-center justify-between">

@@ -52,6 +52,17 @@ export default function GastoExtraPrincipal() {
     return date.toLocaleDateString();
   };
 
+  const renderRequiereBus = (es_actividad_bus) => {
+    const colorClass = es_actividad_bus ? "text-emerald-500" : "text-red-500";
+    const descripcion = es_actividad_bus ? "Sí" : "No";
+    return (
+      <span className="flex items-center">
+        <i className={`fas fa-circle ${colorClass} mr-2`}></i>
+        {descripcion}
+      </span>
+    );
+  };
+
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
@@ -89,6 +100,9 @@ export default function GastoExtraPrincipal() {
                   Descripción
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  ¿Requiere Bus?
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Fecha Creación
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
@@ -110,6 +124,9 @@ export default function GastoExtraPrincipal() {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {gasto.descripcion}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {renderRequiereBus(gasto.es_actividad_bus)}
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {adjustDate(gasto.createdAt)}
