@@ -47,6 +47,8 @@ import GastoExtraPrincipal from "views/admin/GastoExtra/GastoExtraPrincipal.js";
 import GastoExtraGestionar from "views/admin/GastoExtra/GastoExtraGestionar.js";
 import AsignarActividadPrincipal from "views/admin/AsignarActividad/AsignarActividadPrincipal.js";
 import AsignarActividadGestionar from "views/admin/AsignarActividad/AsignarActividadGestionar.js";
+import BusPrincipal from "views/admin/Bus/BusPrincipal.js";
+import BusGestionar from "views/admin/Bus/BusGestionar.js";
 
 export default function Admin() {
   return (
@@ -111,6 +113,8 @@ export default function Admin() {
               exact 
               component={AsignarActividadGestionar} 
             />
+            <Route path="/admin/Bus/BusPrincipal" exact component={BusPrincipal} />
+            <Route path="/admin/Bus/BusGestionar/:id?" exact component={BusGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />

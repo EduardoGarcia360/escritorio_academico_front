@@ -49,6 +49,8 @@ import GastoExtraPrincipal from "views/admin/GastoExtra/GastoExtraPrincipal.js";
 import GastoExtraGestionar from "views/admin/GastoExtra/GastoExtraGestionar.js";
 import AsignarActividadPrincipal from "views/admin/AsignarActividad/AsignarActividadPrincipal.js";
 import AsignarActividadGestionar from "views/admin/AsignarActividad/AsignarActividadGestionar.js";
+import BusPrincipal from "views/admin/Bus/BusPrincipal.js";
+import BusGestionar from "views/admin/Bus/BusGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -109,6 +111,8 @@ ReactDOM.render(
         exact 
         component={AsignarActividadGestionar} 
       />
+      <Route path="/admin/Bus/BusPrincipal" exact component={BusPrincipal} />
+      <Route path="/admin/Bus/BusGestionar/:id?" exact component={BusGestionar} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>
