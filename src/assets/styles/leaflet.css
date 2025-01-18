@@ -1,0 +1,17 @@
+.leaflet-container {
+  width: 100vw;
+  height: 100vh;
+}
+#contenedorMapaLeaflet .leaflet-control-container .leaflet-routing-container-hide {
+  /* oculta el itinerario de viaje */
+  display: none;
+}
+#contenedorMapaLeaflet .leaflet-pane {
+  z-index: 1;
+}
+#contenedorMapaLeaflet .leaflet-control {
+  z-index: 1;
+}
+#contenedorMapaLeaflet .leaflet-top {
+  z-index: 1;
+}

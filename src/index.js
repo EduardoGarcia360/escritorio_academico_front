@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/styles/tailwind.css";
+import "assets/styles/leaflet.css"
 
 // layouts
 
@@ -53,6 +54,7 @@ import BusPrincipal from "views/admin/Bus/BusPrincipal.js";
 import BusGestionar from "views/admin/Bus/BusGestionar.js";
 import AsignarBusPrincipal from "views/admin/AsignarBus/AsignarBusPrincipal.js";
 import AsignarBusGestionar from "views/admin/AsignarBus/AsignarBusGestionar.js";
+import CoordenadasBusPrincipal from "views/admin/CoordenadasBus/CoordenadasBusPrincipal.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -124,6 +126,11 @@ ReactDOM.render(
         path="/admin/AsignarBus/AsignarBusGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/actividad/:idAsignacion/transporte/:idTransporte?" 
         exact 
         component={AsignarBusGestionar} 
+      />
+      <Route 
+        path="/admin/CoordenadasBus/CoordenadasBusPrincipal/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/actividad/:idAsignacion/transporte/:idTransporte" 
+        exact 
+        component={CoordenadasBusPrincipal} 
       />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />

@@ -63,6 +63,10 @@ export default function AsignarBusPrincipal() {
     }
   };
 
+  const handleVerUbicaciones = (idTransporte) => {
+    history.push(`/admin/CoordenadasBus/CoordenadasBusPrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/actividad/${idAsignacion}/transporte/${idTransporte}`)
+  };
+
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white">
@@ -118,6 +122,9 @@ export default function AsignarBusPrincipal() {
                   Teléfono (Maestro)
                 </th>
                 <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
+                  Ver Ubicación
+                </th>
+                <th className="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100">
                   Acciones
                 </th>
               </tr>
@@ -148,6 +155,15 @@ export default function AsignarBusPrincipal() {
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {bus.telefono}
+                  </td>
+                  <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    <button
+                      className="bg-orange-500 text-white px-3 py-1 rounded-full flex items-center"
+                      onClick={() => handleVerUbicaciones(bus.id_asignacion_transporte)}
+                    >
+                      <i className="fas fa-star mr-2"></i>
+                      {bus.cantidad_ubicaciones}
+                    </button>
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <button

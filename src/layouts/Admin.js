@@ -51,6 +51,7 @@ import BusPrincipal from "views/admin/Bus/BusPrincipal.js";
 import BusGestionar from "views/admin/Bus/BusGestionar.js";
 import AsignarBusPrincipal from "views/admin/AsignarBus/AsignarBusPrincipal.js";
 import AsignarBusGestionar from "views/admin/AsignarBus/AsignarBusGestionar.js";
+import CoordenadasBusPrincipal from "views/admin/CoordenadasBus/CoordenadasBusPrincipal.js";
 
 export default function Admin() {
   return (
@@ -126,6 +127,11 @@ export default function Admin() {
               path="/admin/AsignarBus/AsignarBusGestionar/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/actividad/:idAsignacion/transporte/:idTransporte?" 
               exact 
               component={AsignarBusGestionar} 
+            />
+            <Route 
+              path="/admin/CoordenadasBus/CoordenadasBusPrincipal/:idCiclo/jornada/:idJornadaCiclo/grado/:idGrado/actividad/:idAsignacion/transporte/:idTransporte" 
+              exact 
+              component={CoordenadasBusPrincipal} 
             />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
