@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { api } from "services/api";
+import React from "react";
 
 // components
 
@@ -9,24 +8,6 @@ import CardPageVisits from "components/Cards/CardPageVisits.js";
 import CardSocialTraffic from "components/Cards/CardSocialTraffic.js";
 
 export default function Dashboard() {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  const getUsuarios = async () => {
-    console.log('ENTRA EN USUARIOS')
-    const response = await api.get('usuarios/')
-    console.log('response', response)
-  }
-
-  useEffect(()=>{
-    if (hasMounted) {
-        getUsuarios()
-    }
-  }, [hasMounted])
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
   return (
     <>
       <div className="flex flex-wrap">

@@ -28,20 +28,6 @@ export default function CicloEscolarPrincipal() {
     history.push(`/admin/CicloEscolar/CicloEscolarGestionar/${id}`);
   };
 
-  const handleEliminar = async (id) => {
-    const confirmar = window.confirm("¿Está seguro que desea eliminar este registro?");
-    if (confirmar) {
-      try {
-        await api.delete(`ciclosescolares/${id}`);
-        alert("Ciclo escolar eliminado correctamente.");
-        setCiclos((prevCiclos) => prevCiclos.filter((ciclo) => ciclo.id_ciclo !== id));
-      } catch (error) {
-        console.error("Error al eliminar ciclo escolar:", error);
-        alert("Ocurrió un error al intentar eliminar el ciclo escolar.");
-      }
-    }
-  };
-
   const adjustDate = (dateString) => {
     const date = new Date(dateString);
     date.setDate(date.getDate() + 1);
@@ -162,12 +148,6 @@ export default function CicloEscolarPrincipal() {
                         >
                           Editar
                         </button>
-                        {/* <button
-                          className="bg-red-500 text-white px-3 py-1 rounded"
-                          onClick={() => handleEliminar(ciclo.id_ciclo)}
-                        >
-                          Eliminar
-                        </button> */}
                       </>
                     )}
                   </td>
