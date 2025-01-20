@@ -55,6 +55,8 @@ import BusGestionar from "views/admin/Bus/BusGestionar.js";
 import AsignarBusPrincipal from "views/admin/AsignarBus/AsignarBusPrincipal.js";
 import AsignarBusGestionar from "views/admin/AsignarBus/AsignarBusGestionar.js";
 import CoordenadasBusPrincipal from "views/admin/CoordenadasBus/CoordenadasBusPrincipal.js";
+import UsuarioPrincipal from "views/admin/Usuario/UsuarioPrincipal.js";
+import UsuarioGestionar from "views/admin/Usuario/UsuarioGestionar.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -132,6 +134,8 @@ ReactDOM.render(
         exact 
         component={CoordenadasBusPrincipal} 
       />
+      <Route path="/admin/Usuario/UsuarioPrincipal" exact component={UsuarioPrincipal} />
+      <Route path="/admin/Usuario/UsuarioGestionar/:id?" exact component={UsuarioGestionar} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/" />
     </Switch>

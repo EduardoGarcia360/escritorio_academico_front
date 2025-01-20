@@ -52,6 +52,8 @@ import BusGestionar from "views/admin/Bus/BusGestionar.js";
 import AsignarBusPrincipal from "views/admin/AsignarBus/AsignarBusPrincipal.js";
 import AsignarBusGestionar from "views/admin/AsignarBus/AsignarBusGestionar.js";
 import CoordenadasBusPrincipal from "views/admin/CoordenadasBus/CoordenadasBusPrincipal.js";
+import UsuarioPrincipal from "views/admin/Usuario/UsuarioPrincipal.js";
+import UsuarioGestionar from "views/admin/Usuario/UsuarioGestionar.js";
 
 export default function Admin() {
   return (
@@ -133,6 +135,8 @@ export default function Admin() {
               exact 
               component={CoordenadasBusPrincipal} 
             />
+            <Route path="/admin/Usuario/UsuarioPrincipal" exact component={UsuarioPrincipal} />
+            <Route path="/admin/Usuario/UsuarioGestionar/:id?" exact component={UsuarioGestionar} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <FooterAdmin />
