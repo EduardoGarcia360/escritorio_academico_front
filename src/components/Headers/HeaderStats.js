@@ -1,10 +1,36 @@
-import React from "react";
-
-// components
-
+import React, { useState, useEffect } from "react";
 import CardStats from "components/Cards/CardStats.js";
+import { api } from "services/api";
 
 export default function HeaderStats() {
+  const [hasMounted, setHasMounted] = useState(false);
+  const [valores, setValores] = useState({})
+
+  const getDatos = async () => {
+    const params = {
+      procedureName: "valoresStatusColegio",
+      params: ["id_colegio"],
+      objParams: {},
+    };
+    const response = await api.post("execute-procedure", params);
+    // console.log('stats', response)
+    if (response.status === 200) {
+      setValores(response.data.results[0]);
+    } else {
+      setValores({});
+    }
+  }
+
+  useEffect(() => {
+    if (hasMounted) {
+      getDatos();
+    }
+  }, [hasMounted]);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   return (
     <>
       {/* Header */}
@@ -15,49 +41,33 @@ export default function HeaderStats() {
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="TRAFFIC"
-                  statTitle="350,897"
-                  statArrow="up"
-                  statPercent="3.48"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="far fa-chart-bar"
+                  statSubtitle="Estudiantes Inscritos"
+                  statTitle={valores.estudiantes_inscritos ?? ''}
+                  statIconName="fas fa-school"
                   statIconColor="bg-red-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="NEW USERS"
-                  statTitle="2,356"
-                  statArrow="down"
-                  statPercent="3.48"
-                  statPercentColor="text-red-500"
-                  statDescripiron="Since last week"
-                  statIconName="fas fa-chart-pie"
-                  statIconColor="bg-orange-500"
-                />
-              </div>
-              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
-                <CardStats
-                  statSubtitle="SALES"
-                  statTitle="924"
-                  statArrow="down"
-                  statPercent="1.10"
-                  statPercentColor="text-orange-500"
-                  statDescripiron="Since yesterday"
+                  statSubtitle="Maestros Activos"
+                  statTitle={valores.docentes_activos ?? ''}
                   statIconName="fas fa-users"
                   statIconColor="bg-pink-500"
                 />
               </div>
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="PERFORMANCE"
-                  statTitle="49,65%"
-                  statArrow="up"
-                  statPercent="12"
-                  statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="fas fa-percent"
+                  statSubtitle="% Cuotas Pagadas (mes)"
+                  statTitle={valores.ptje_cuotas_pagadas ?? ''}
+                  statIconName="fas fa-chart-pie"
+                  statIconColor="bg-orange-500"
+                />
+              </div>
+              <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                <CardStats
+                  statSubtitle="Actividades este Mes"
+                  statTitle={valores.actividades_mes ?? ''}
+                  statIconName="fas fa-bus"
                   statIconColor="bg-lightBlue-500"
                 />
               </div>
