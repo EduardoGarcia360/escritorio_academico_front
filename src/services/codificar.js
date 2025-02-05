@@ -23,6 +23,17 @@ const cifrarObjeto = (data) => {
 };
 
 /**
+ * Función para cifrar un objeto
+ * @param {Object} data - El objeto que deseas cifrar
+ * @returns {String} - El objeto cifrado como string
+ */
+const cifrarObjetoGeneral = (data) => {
+    const jsonString = JSON.stringify(data);
+    const encryptedData = CryptoJS.AES.encrypt(jsonString, SECRET_KEY).toString();
+    return encryptedData;
+}
+
+/**
  * Función para descifrar un objeto
  * @param {String} encryptedPayload - El string cifrado del objeto
  * @returns {Object} - El objeto original descifrado
@@ -43,4 +54,5 @@ const descifrarObjeto = (encryptedPayload) => {
 module.exports = {
     cifrarObjeto,
     descifrarObjeto,
+    cifrarObjetoGeneral,
 };

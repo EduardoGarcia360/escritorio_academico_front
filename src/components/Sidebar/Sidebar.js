@@ -4,9 +4,17 @@ import { Link } from "react-router-dom";
 
 import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
+import { rutas } from "config/rutas.js";
+import { rolePermissions } from "config/rolePermissions.js";
+import { getCookie } from "services/cookie.js";
+import { descifrarObjeto } from "services/codificar.js";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+  const userProperties = getCookie('userProperties');
+  const descifrado = descifrarObjeto(userProperties);
+  const userRole = descifrado.role; // Obtener rol del usuario
+  
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -112,226 +120,31 @@ export default function Sidebar() {
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/Usuario/UsuarioPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/Usuario/UsuarioPrincipal"
-                >
-                  <i
+              {rutas
+              .filter((ruta) => rolePermissions[userRole]?.includes(ruta.path)) // Filtrar rutas permitidas para el usuario
+              .map((ruta) => (
+                <li className="items-center" key={ruta.path}>
+                  <Link
                     className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/Usuario/UsuarioPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
+                      "text-xs uppercase py-3 font-bold block " +
+                      (window.location.href.indexOf(ruta.path) !== -1
+                        ? "text-lightBlue-500 hover:text-lightBlue-600"
+                        : "text-blueGray-700 hover:text-blueGray-500")
                     }
-                  ></i>{" "}
-                  Usuarios
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/ColegioGestion") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/ColegioGestion"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/ColegioGestion") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Colegio
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/Banco/BancoPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/Banco/BancoPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/Banco/BancoPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Banco
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/CuentaBancaria/CuentaBancariaPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/CuentaBancaria/CuentaBancariaPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/CuentaBancaria/CuentaBancariaPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Cuenta Bancaria
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/CuotaColegio/CuotaColegioPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/CuotaColegio/CuotaColegioPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/CuotaColegio/CuotaColegioPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Cuota Colegio
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/GastoExtra/GastoExtraPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/GastoExtra/GastoExtraPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/GastoExtra/GastoExtraPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Gasto Extraordinario
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/Bus/BusPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/Bus/BusPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/Bus/BusPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Bus
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/EstudiantePrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/EstudiantePrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/EstudiantePrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Estudiantes
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/NivelEducacion/NivelEducacionPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/NivelEducacion/NivelEducacionPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/NivelEducacion/NivelEducacionPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Nivel de Educación
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/PersonalDocente/PersonalDocentePrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/PersonalDocente/PersonalDocentePrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/PersonalDocente/PersonalDocentePrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Personal Docente
-                </Link>
-              </li>
+                    to={ruta.path}
+                  >
+                    <i
+                      className={
+                        `fas ${ruta.icon} mr-2 text-sm ` +
+                        (window.location.href.indexOf(ruta.path) !== -1
+                          ? "opacity-75"
+                          : "text-blueGray-300")
+                      }
+                    ></i>{" "}
+                    {ruta.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
 
             {/* Divider */}
@@ -343,7 +156,7 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
+              {/* <li className="items-center">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
@@ -363,7 +176,7 @@ export default function Sidebar() {
                   ></i>{" "}
                   Ciclo Escolar
                 </Link>
-              </li>
+              </li> */}
 
               <li className="items-center">
                 <Link

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { api } from "services/api";
 import { useHistory } from "react-router-dom";
+import { cifrarObjetoGeneral } from "services/codificar.js";
+import { setCookie } from "services/cookie.js";
 
 export default function Login() {
   const history = useHistory();
@@ -24,6 +26,11 @@ export default function Login() {
     const response = await api.login(credenciales);
     // console.log("response", response);
     if (response.data.status === "OK") {
+      // se guarda el rol del usuario en una cookie
+      const userProperties = {
+        role: response.data.role
+      }
+      setCookie('userProperties', cifrarObjetoGeneral(userProperties))
       history.push("/admin/dashboard");
     }
   };
