@@ -61,6 +61,8 @@ export default function UsuarioPrincipal() {
         return "Docente";
       case "E":
         return "Estudiante";
+      case "P":
+        return "Padre de Familia";
       case "O":
         return "Otro";
       default:
