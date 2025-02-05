@@ -121,7 +121,7 @@ export default function Sidebar() {
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {rutas
-              .filter((ruta) => rolePermissions[userRole]?.includes(ruta.path)) // Filtrar rutas permitidas para el usuario
+              .filter((ruta) => (!ruta.hideInSidebar && rolePermissions[userRole]?.includes(ruta.path))) // Filtrar rutas permitidas para el usuario
               .map((ruta) => (
                 <li className="items-center" key={ruta.path}>
                   <Link
