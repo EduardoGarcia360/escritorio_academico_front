@@ -32,7 +32,18 @@ const getCookie = (name) => {
   return null;
 };
 
+/**
+ * Elimina todas las cookies del sitio.
+ */
+const removeAllCookies = () => {
+  document.cookie.split(";").forEach((cookie) => {
+      const [name] = cookie.split("=");
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  });
+};
+
 module.exports = {
     setCookie,
     getCookie,
+    removeAllCookies,
 };

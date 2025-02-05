@@ -1,11 +1,16 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
+import { useHistory } from "react-router-dom";
+import { removeAllCookies } from "services/cookie.js";
+import { api } from "services/api";
 
 const NotificationDropdown = () => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
+  const history = useHistory();
+
   const openDropdownPopover = () => {
     console.log("hey");
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
@@ -16,6 +21,23 @@ const NotificationDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+
+  const logout = async () => {
+    try {
+      // Enviar petición al backend para eliminar la cookie
+      const response = await api.logout();
+      console.log("logout", response);
+
+      // Limpiar cookies
+      removeAllCookies();
+
+      // Redirigir al login
+      history.push('/auth/login');
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   return (
     <>
       <a
@@ -72,6 +94,16 @@ const NotificationDropdown = () => {
           onClick={(e) => e.preventDefault()}
         >
           Seprated link
+        </a>
+        <a
+          href="#logout"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+          onClick={(e) => {
+            e.preventDefault();
+            logout();
+          }}
+        >
+            Cerrar Sesión
         </a>
       </div>
     </>

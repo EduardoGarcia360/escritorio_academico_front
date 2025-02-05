@@ -158,6 +158,32 @@ export const api = {
         }
     },
 
+    logout: async () => {
+        try {
+            const response = await fetch(`${URI}logout`, {
+                method: 'POST',
+                credentials: 'include', // Habilita envío automático de cookies
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const responseData = await response.json();
+
+            if (!responseData) {
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud LOGOUT' } };
+            }
+
+            // Descifrar el payload si está presente
+            const decryptedData = responseData.payload ? descifrarObjeto(responseData.payload) : responseData;
+
+            return { data: decryptedData, status: response.status };;
+        } catch (error) {
+            console.error('Error en LOGOUT:', error);
+            return { status: 500, data: { status: 'ERROR', message: error.message } }
+        }
+    },
+
     // Solicitud VALIDAR LOGIN
     validateLogin: async () => {
         try {
