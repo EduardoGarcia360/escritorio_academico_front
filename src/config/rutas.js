@@ -47,6 +47,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A", "B"],
     hideInSidebar: false,
+    order: 2,
     component: ColegioGestion,
   },
   {
@@ -54,8 +55,9 @@ export const rutas = [
     path: "/admin/EstudiantePrincipal",
     name: "Estudiante",
     icon: "fa-solid fa-star",
-    roles: ["A"],
+    roles: ["A", "P"],
     hideInSidebar: false,
+    order: 3,
     component: EstudiantePrincipal,
   },
   {
@@ -92,6 +94,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 10,
     component: NivelEducacionPrincipal,
   },
   {
@@ -110,6 +113,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 11,
     component: CicloEscolarPrincipal,
   },
   {
@@ -200,6 +204,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 4,
     component: PersonalDocentePrincipal,
   },
   {
@@ -236,6 +241,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 5,
     component: CuotaColegioPrincipal,
   },
   {
@@ -272,6 +278,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 6,
     component: BancoPrincipal,
   },
   {
@@ -290,6 +297,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 7,
     component: CuentaBancariaPrincipal,
   },
   {
@@ -308,6 +316,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 8,
     component: GastoExtraPrincipal,
   },
   {
@@ -344,6 +353,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 9,
     component: BusPrincipal,
   },
   {
@@ -389,6 +399,7 @@ export const rutas = [
     icon: "fa-solid fa-star",
     roles: ["A"],
     hideInSidebar: false,
+    order: 1,
     component: UsuarioPrincipal,
   },
   {

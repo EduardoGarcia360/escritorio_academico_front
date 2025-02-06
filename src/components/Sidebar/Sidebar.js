@@ -116,12 +116,13 @@ export default function Sidebar() {
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Configuración
+              Menú
             </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
               {rutas
               .filter((ruta) => (!ruta.hideInSidebar && rolePermissions[userRole]?.includes(ruta.path))) // Filtrar rutas permitidas para el usuario
+              .sort((a, b) => a.order - b.order)
               .map((ruta) => (
                 <li className="items-center" key={ruta.path}>
                   <Link
@@ -146,51 +147,6 @@ export default function Sidebar() {
                 </li>
               ))}
             </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Ciclo Escolar
-            </h6>
-            {/* Navigation */}
-
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              {/* <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/CicloEscolar/CicloEscolarPrincipal") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/CicloEscolar/CicloEscolarPrincipal"
-                >
-                  <i
-                    className={
-                      "fas fa-solid fa-star mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/CicloEscolar/CicloEscolarPrincipal") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Ciclo Escolar
-                </Link>
-              </li> */}
-
-              <li className="items-center">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  to="/auth/login"
-                >
-                  <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Login
-                </Link>
-              </li>
-            </ul>
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
           </div>
         </div>
       </nav>
