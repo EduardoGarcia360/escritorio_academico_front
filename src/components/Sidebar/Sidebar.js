@@ -6,6 +6,8 @@ import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
 import UserDropdown from "components/Dropdowns/UserDropdown.js";
 import { rutas } from "config/rutas.js";
 import { rolePermissions } from "config/rolePermissions.js";
+import { rutasReportes } from "config/rutasReportes";
+import { rolePermissionsReport } from "config/rolePermissionsReport";
 import { getCookie } from "services/cookie.js";
 import { descifrarObjeto } from "services/codificar.js";
 
@@ -146,6 +148,39 @@ export default function Sidebar() {
                   </Link>
                 </li>
               ))}
+            </ul>
+
+            <hr className="my-4 md:min-w-full" />
+            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+              Reportes
+            </h6>
+            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
+              {rutasReportes
+                .filter((ruta) => (!ruta.hideInSidebar && rolePermissionsReport[userRole]?.includes(ruta.path))) // Filtrar rutas permitidas para el usuario
+                .sort((a, b) => a.order - b.order)
+                .map((ruta) => (
+                  <li className="items-center" key={ruta.path}>
+                    <Link
+                      className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf(ruta.path) !== -1
+                          ? "text-lightBlue-500 hover:text-lightBlue-600"
+                          : "text-blueGray-700 hover:text-blueGray-500")
+                      }
+                      to={ruta.path}
+                    >
+                      <i
+                        className={
+                          `fas ${ruta.icon} mr-2 text-sm ` +
+                          (window.location.href.indexOf(ruta.path) !== -1
+                            ? "opacity-75"
+                            : "text-blueGray-300")
+                        }
+                      ></i>{" "}
+                      {ruta.name}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         </div>
