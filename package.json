@@ -5,6 +5,13 @@
   "repository": "https://github.com/creativetimofficial/notus-react",
   "license": "MIT",
   "dependencies": {
+    "@capacitor-community/background-geolocation": "^1.2.20",
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/cli": "^7.0.1",
+    "@capacitor/core": "^7.0.1",
+    "@capacitor/geolocation": "^7.1.0",
+    "@capacitor/preferences": "^7.0.0",
     "@fortawesome/fontawesome-free": "5.15.3",
     "@popperjs/core": "2.9.1",
     "@tailwindcss/forms": "0.2.1",
