@@ -14,8 +14,11 @@ import { descifrarObjeto } from "services/codificar.js";
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   const userProperties = getCookie('userProperties');
+  console.log('SIDEBAR userProperties', userProperties);
   const descifrado = descifrarObjeto(userProperties);
+  console.log('SIDEBAR descifrado', descifrado);
   const userRole = descifrado.role; // Obtener rol del usuario
+  console.log('SIDEBAR userRole', userRole);
   
   return (
     <>

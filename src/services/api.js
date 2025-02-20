@@ -187,7 +187,7 @@ export const api = {
     // Solicitud VALIDAR LOGIN
     validateLogin: async () => {
         try {
-            const response = await fetch(`${URI}/auth/validatesession`, {
+            const response = await fetch(`${URI}auth/validatesession`, {
                 method: 'GET',
                 credentials: 'include', // Habilita envío automático de cookies
             });
