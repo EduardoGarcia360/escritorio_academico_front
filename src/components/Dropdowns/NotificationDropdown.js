@@ -3,6 +3,7 @@ import { createPopper } from "@popperjs/core";
 import { useHistory } from "react-router-dom";
 import { removeAllCookies } from "services/cookie.js";
 import { api } from "services/api";
+import capacitorStorage from "services/capacitorStorage.js";
 
 const NotificationDropdown = () => {
   // dropdown props
@@ -30,6 +31,7 @@ const NotificationDropdown = () => {
 
       // Limpiar cookies
       removeAllCookies();
+      await capacitorStorage.capacitorClearStorage();
 
       // Redirigir al login
       history.push('/auth/login');
