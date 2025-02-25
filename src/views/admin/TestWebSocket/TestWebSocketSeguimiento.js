@@ -20,9 +20,10 @@ const SeguimientoWS = () => {
 
     newSocket.on("message", (data) => {
       console.log("Mensaje recibido en Seguimiento:", data);
-      const mensaje = descifrarString(data.mensaje);
+      const decodeData = descifrarString(data);
+      console.log('decodeData', decodeData);
       // Se espera que el mensaje tenga la propiedad "mensaje"
-      setMessages((prev) => [...prev, mensaje || data]);
+      setMessages((prev) => [...prev, decodeData.mensaje || data]);
     });
 
     setSocket(newSocket);

@@ -13,7 +13,7 @@ export default function Login() {
   // Función para verificar si el token existe en las cookies
   const checkToken = async () => {
     const response = await api.validateLogin()
-    console.log('RESPONSE CHECK TOKEN', response)
+    // console.log('RESPONSE CHECK TOKEN', response)
     if (response.data.status === 'OK') {
       history.push("/admin/dashboard");
     }
@@ -24,7 +24,7 @@ export default function Login() {
     const credenciales = { nombre_usuario, contrasena };
     // console.log("LOGIN", credenciales);
     const response = await api.login(credenciales);
-    console.log("RESPONSE LOGIN", response);
+    // console.log("RESPONSE LOGIN", response);
     if (response.data.status === "OK") {
       // se guarda el rol del usuario en una cookie
       const userProperties = {
