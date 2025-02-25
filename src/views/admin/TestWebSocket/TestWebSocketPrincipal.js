@@ -5,7 +5,7 @@ import WebSocketManager from 'services/websocketManager.js';
 
 const IniciarWS = () => {
   const [wsManager, setWsManager] = useState(null);
-  const wsUrl = `ws://${process.env.REACT_APP_HOST_NAME}:3000`;
+  const wsUrl = `wss://${process.env.REACT_APP_HOST_NAME}:3000`;
 
   const iniciarViaje = () => {
     if (!wsManager) {
