@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
+import { descifrarString } from 'services/codificar.js';
 
 const SeguimientoWS = () => {
   const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
@@ -19,8 +20,9 @@ const SeguimientoWS = () => {
 
     newSocket.on("message", (data) => {
       console.log("Mensaje recibido en Seguimiento:", data);
+      const mensaje = descifrarString(data.mensaje);
       // Se espera que el mensaje tenga la propiedad "mensaje"
-      setMessages((prev) => [...prev, data.mensaje || data]);
+      setMessages((prev) => [...prev, mensaje || data]);
     });
 
     setSocket(newSocket);
@@ -43,18 +45,18 @@ const SeguimientoWS = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="mt-4">
       <h1 className="text-2xl font-bold mb-4">Seguimiento de bus</h1>
       <div className="mb-4">
         <button 
           onClick={() => joinRoom("viaje-sala-123")}
-          className="px-4 py-2 bg-blue-500 text-white rounded mr-2 hover:bg-blue-600"
+          className="px-4 py-2 bg-emerald-500 text-white rounded mr-2 hover:bg-emerald-600"
         >
           Room 123
         </button>
         <button 
           onClick={() => joinRoom("viaje-sala-456")}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          className="px-4 py-2 bg-lightBlue-500 text-white rounded hover:bg-lightBlue-600"
         >
           Room 456
         </button>

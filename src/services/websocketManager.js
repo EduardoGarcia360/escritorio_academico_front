@@ -1,5 +1,6 @@
 // /src/services/websocketManager.js
 import { io } from "socket.io-client";
+import { cifrarString } from "./codificar.js";
 
 class WebSocketManager {
   constructor(url, roomId = null) {
@@ -89,7 +90,7 @@ class WebSocketManager {
   // Envía un mensaje que incluye fecha y hora actual
   enviarMensajeConFecha() {
     const ahora = new Date();
-    const mensaje = `hola desde socket con ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`;
+    const mensaje = cifrarString(`hola desde socket con ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`);
     this.enviarRegistro({ mensaje });
     console.log("Enviando mensaje:", mensaje);
   }
