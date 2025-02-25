@@ -10,10 +10,11 @@ const IniciarWS = () => {
 
   const iniciarViaje = () => {
     if (!wsManager) {
-      const manager = new WebSocketManager(socketUrl);
+      // Se crea la conexión usando el room "viaje-sala-123"
+      const manager = new WebSocketManager(socketUrl, "viaje-sala-123");
       manager.conectar();
       setWsManager(manager);
-      // Una vez establecida la conexión, inicia el envío periódico
+      // Una vez conectados, inicia el envío periódico
       manager.socket.on("connect", () => {
         manager.iniciarEnvioPeriodo();
       });

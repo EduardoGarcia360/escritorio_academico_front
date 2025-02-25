@@ -2,38 +2,64 @@ import React, { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 
 const SeguimientoWS = () => {
-  const [messages, setMessages] = useState([]);
-  // Usamos la misma URL de conexión
   const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
+  const [socket, setSocket] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState("");
 
   useEffect(() => {
-    const socket = io(socketUrl, {
+    const newSocket = io(socketUrl, {
       transports: ["websocket"],
       reconnection: true,
     });
 
-    socket.on("connect", () => {
+    newSocket.on("connect", () => {
       console.log("Conexión establecida a Socket.io en Seguimiento");
     });
 
-    socket.on("message", (data) => {
+    newSocket.on("message", (data) => {
       console.log("Mensaje recibido en Seguimiento:", data);
-      // Se asume que el mensaje viene en la propiedad "mensaje"
-      setMessages((prevMessages) => [...prevMessages, data.mensaje || data]);
+      // Se espera que el mensaje tenga la propiedad "mensaje"
+      setMessages((prev) => [...prev, data.mensaje || data]);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Desconexión de Socket.io en Seguimiento");
-    });
+    setSocket(newSocket);
 
     return () => {
-      socket.disconnect();
+      newSocket.disconnect();
     };
   }, [socketUrl]);
+
+  const joinRoom = (roomId) => {
+    if (socket && socket.connected) {
+      socket.emit("joinRoom", roomId);
+      setCurrentRoom(roomId);
+      console.log(`Unido a la sala ${roomId}`);
+      // Limpiamos los mensajes al cambiar de room
+      setMessages([]);
+    } else {
+      console.error("Socket no está conectado");
+    }
+  };
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Seguimiento de bus</h1>
+      <div className="mb-4">
+        <button 
+          onClick={() => joinRoom("viaje-sala-123")}
+          className="px-4 py-2 bg-blue-500 text-white rounded mr-2 hover:bg-blue-600"
+        >
+          Room 123
+        </button>
+        <button 
+          onClick={() => joinRoom("viaje-sala-456")}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          Room 456
+        </button>
+      </div>
+      <h2 className="text-xl font-semibold mb-2">Mensajes en {currentRoom}</h2>
       <ul className="list-disc pl-5">
         {messages.map((msg, index) => (
           <li key={index}>{msg}</li>
