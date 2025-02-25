@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import WebSocketManager from 'services/websocketManager.js';
+import { io } from "socket.io-client";
 
 const SeguimientoWS = () => {
   const [messages, setMessages] = useState([]);
-  const wsUrl = `wss://${process.env.REACT_APP_HOST_NAME}`;
+  // Usamos la misma URL de conexión
+  const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
 
   useEffect(() => {
-    const manager = new WebSocketManager(wsUrl);
-    manager.conectar();
-
-    // Cuando se abre la conexión, podemos confirmar la conexión en consola
-    manager.socket.addEventListener('open', () => {
-      console.log('Seguimiento - Conexión abierta');
+    const socket = io(socketUrl, {
+      transports: ["websocket"],
+      reconnection: true,
     });
 
-    // Escuchamos el evento "message" y actualizamos el estado para listar los mensajes
-    manager.socket.addEventListener('message', (event) => {
-      console.log('Seguimiento - Mensaje recibido:', event.data);
-      setMessages(prevMessages => [...prevMessages, event.data]);
+    socket.on("connect", () => {
+      console.log("Conexión establecida a Socket.io en Seguimiento");
     });
 
-    // Limpiamos la conexión al desmontar el componente
+    socket.on("message", (data) => {
+      console.log("Mensaje recibido en Seguimiento:", data);
+      // Se asume que el mensaje viene en la propiedad "mensaje"
+      setMessages((prevMessages) => [...prevMessages, data.mensaje || data]);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Desconexión de Socket.io en Seguimiento");
+    });
+
     return () => {
-      manager.cerrarConexion();
+      socket.disconnect();
     };
-  }, [wsUrl]);
+  }, [socketUrl]);
 
   return (
     <div className="p-4">

@@ -1,75 +1,83 @@
 // /src/services/websocketManager.js
+import { io } from "socket.io-client";
 
-export default class WebSocketManager {
-    constructor(url) {
-      this.url = url;
-      this.socket = null;
-      this.intervalId = null;
-    }
-  
-    // Inicia la conexión WebSocket
-    conectar() {
-      this.socket = new WebSocket(this.url);
-      this.socket.onopen = () => {
-        console.log('Conexión establecida');
-      };
-      this.socket.onmessage = (event) => {
-        console.log('Mensaje recibido:', event.data);
-      };
-      this.socket.onerror = (error) => {
-        console.error('Error en el WebSocket:', error);
-      };
-      this.socket.onclose = () => {
-        console.log('Conexión cerrada');
-        if (this.intervalId) clearInterval(this.intervalId);
-      };
-    }
-  
-    // Verifica si la conexión está activa
-    testConexion() {
-      return this.socket && this.socket.readyState === WebSocket.OPEN;
-    }
-  
-    // Envía un registro/mensaje
-    enviarRegistro(data) {
-      if (this.testConexion()) {
-        this.socket.send(JSON.stringify(data));
-      } else {
-        console.error('No hay conexión activa para enviar datos');
-      }
-    }
-  
-    // Cierra la conexión WebSocket
-    cerrarConexion() {
-      if (this.socket) {
-        this.socket.close();
-      }
-    }
-  
-    // Inicia el envío periódico cada 30 segundos
-    iniciarEnvioPeriodo() {
-      // Envío inmediato del primer mensaje (opcional)
-      this.enviarMensajeConFecha();
-      this.intervalId = setInterval(() => {
-        this.enviarMensajeConFecha();
-      }, 30000);
-    }
-  
-    // Método auxiliar para enviar el mensaje con fecha y hora actual
-    enviarMensajeConFecha() {
-      const ahora = new Date();
-      const mensaje = `hola desde socket con ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`;
-      this.enviarRegistro({ mensaje });
-      console.log('Enviando mensaje:', mensaje);
-    }
-  
-    // Detiene el envío periódico sin cerrar la conexión
-    detenerEnvioPeriodo() {
-      if (this.intervalId) {
-        clearInterval(this.intervalId);
-        this.intervalId = null;
-        console.log('Envio periódico detenido');
-      }
+class WebSocketManager {
+  constructor(url) {
+    this.url = url;
+    this.socket = null;
+    this.intervalId = null;
+  }
+
+  // Inicia la conexión con Socket.io
+  conectar() {
+    this.socket = io(this.url, {
+      transports: ["websocket"],
+      reconnection: true,
+    });
+
+    this.socket.on("connect", () => {
+      console.log("Conexión establecida a Socket.io");
+    });
+
+    this.socket.on("message", (data) => {
+      console.log("Mensaje recibido:", data);
+    });
+
+    this.socket.on("disconnect", () => {
+      console.log("Socket.io desconectado");
+    });
+
+    this.socket.on("connect_error", (error) => {
+      console.error("Error en la conexión Socket.io:", error);
+    });
+  }
+
+  // Verifica si la conexión está activa
+  testConexion() {
+    return this.socket && this.socket.connected;
+  }
+
+  // Envía un mensaje mediante Socket.io
+  enviarRegistro(data) {
+    if (this.testConexion()) {
+      this.socket.emit("message", data);
+    } else {
+      console.error("No hay conexión activa para enviar datos");
     }
   }
-  
+
+  // Cierra la conexión Socket.io
+  cerrarConexion() {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
+
+  // Inicia el envío periódico cada 30 segundos
+  iniciarEnvioPeriodo() {
+    // Envío inmediato del primer mensaje (opcional)
+    this.enviarMensajeConFecha();
+    this.intervalId = setInterval(() => {
+      this.enviarMensajeConFecha();
+    }, 30000);
+  }
+
+  // Detiene el envío periódico sin cerrar la conexión
+  detenerEnvioPeriodo() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+      console.log("Envío periódico detenido");
+    }
+  }
+
+  // Envía un mensaje que incluye fecha y hora
+  enviarMensajeConFecha() {
+    const ahora = new Date();
+    const mensaje = `hola desde socket con ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`;
+    this.enviarRegistro({ mensaje });
+    console.log("Enviando mensaje:", mensaje);
+  }
+}
+
+export default WebSocketManager;
