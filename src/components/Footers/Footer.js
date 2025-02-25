@@ -151,7 +151,7 @@ export default function Footer() {
                 >
                   Creative Tim
                 </a>
-                .
+                {`v. ${process.env.REACT_APP_CURRENT_VERSION}`}{" "}
               </div>
             </div>
           </div>
