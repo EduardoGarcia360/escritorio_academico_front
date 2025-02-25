@@ -38,6 +38,8 @@ import AsignarBusGestionar from "views/admin/AsignarBus/AsignarBusGestionar.js";
 import CoordenadasBusPrincipal from "views/admin/CoordenadasBus/CoordenadasBusPrincipal.js";
 import UsuarioPrincipal from "views/admin/Usuario/UsuarioPrincipal.js";
 import UsuarioGestionar from "views/admin/Usuario/UsuarioGestionar.js";
+import IniciarWS from "views/admin/TestWebSocket/TestWebSocketPrincipal.js";
+import SeguimientoWS from "views/admin/TestWebSocket/TestWebSocketSeguimiento.js";
 
 export const rutas = [
   {
@@ -410,5 +412,23 @@ export const rutas = [
     roles: ["A"],
     hideInSidebar: true,
     component: UsuarioGestionar,
+  },
+  {
+    key: 41,
+    path: "/admin/TestWebSocket/TestWebSocketPrincipal",
+    name: "IniciarWS",
+    icon: "fa-solid fa-star",
+    roles: ["A"],
+    hideInSidebar: false,
+    component: IniciarWS,
+  },
+  {
+    key: 42,
+    path: "/admin/TestWebSocket/TestWebSocketSeguimiento",
+    name: "SeguimientoWS",
+    icon: "fa-solid fa-star",
+    roles: ["A"],
+    hideInSidebar: false,
+    component: SeguimientoWS,
   },
 ];
