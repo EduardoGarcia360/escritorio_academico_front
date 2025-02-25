@@ -22,8 +22,7 @@ const SeguimientoWS = () => {
       console.log("Mensaje recibido en Seguimiento:", data);
       const decodeData = descifrarString(data);
       console.log('decodeData', decodeData);
-      // Se espera que el mensaje tenga la propiedad "mensaje"
-      setMessages((prev) => [...prev, decodeData.mensaje || data]);
+      setMessages((prev) => [...prev, decodeData || data]);
     });
 
     setSocket(newSocket);
@@ -46,28 +45,32 @@ const SeguimientoWS = () => {
   };
 
   return (
-    <div className="mt-4">
-      <h1 className="text-2xl font-bold mb-4">Seguimiento de bus</h1>
-      <div className="mb-4">
-        <button 
-          onClick={() => joinRoom("viaje-sala-123")}
-          className="px-4 py-2 bg-emerald-500 text-white rounded mr-2 hover:bg-emerald-600"
-        >
-          Room 123
-        </button>
-        <button 
-          onClick={() => joinRoom("viaje-sala-456")}
-          className="px-4 py-2 bg-lightBlue-500 text-white rounded hover:bg-lightBlue-600"
-        >
-          Room 456
-        </button>
+    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
+      <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
+        <div className="mt-4">
+          <h1 className="text-2xl font-bold mb-4">Seguimiento de bus</h1>
+          <div className="mb-4">
+            <button 
+              onClick={() => joinRoom("viaje-sala-123")}
+              className="px-4 py-2 bg-emerald-500 text-white rounded mr-2 hover:bg-emerald-600"
+            >
+              Room 123
+            </button>
+            <button 
+              onClick={() => joinRoom("viaje-sala-456")}
+              className="px-4 py-2 bg-lightBlue-500 text-white rounded hover:bg-lightBlue-600"
+            >
+              Room 456
+            </button>
+          </div>
+          <h2 className="text-xl font-semibold mb-2">Mensajes en {currentRoom}</h2>
+          <ul className="list-disc pl-5">
+            {messages.map((msg, index) => (
+              <li key={index}>{msg}</li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <h2 className="text-xl font-semibold mb-2">Mensajes en {currentRoom}</h2>
-      <ul className="list-disc pl-5">
-        {messages.map((msg, index) => (
-          <li key={index}>{msg}</li>
-        ))}
-      </ul>
     </div>
   );
 };
