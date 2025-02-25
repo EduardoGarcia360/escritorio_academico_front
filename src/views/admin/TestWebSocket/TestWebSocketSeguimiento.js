@@ -3,7 +3,7 @@ import WebSocketManager from 'services/websocketManager.js';
 
 const SeguimientoWS = () => {
   const [messages, setMessages] = useState([]);
-  const wsUrl = `wss://${process.env.REACT_APP_HOST_NAME}:3000`;
+  const wsUrl = `wss://${process.env.REACT_APP_HOST_NAME}`;
 
   useEffect(() => {
     const manager = new WebSocketManager(wsUrl);
