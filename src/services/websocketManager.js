@@ -14,7 +14,9 @@ class WebSocketManager {
   conectar() {
     this.socket = io(this.url, {
       transports: ["websocket"],
+      path: "/socket.io/",
       reconnection: true,
+      upgrade: false,
     });
 
     this.socket.on("connect", () => {

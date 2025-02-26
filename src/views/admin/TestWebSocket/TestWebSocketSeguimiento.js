@@ -11,11 +11,21 @@ const SeguimientoWS = () => {
   useEffect(() => {
     const newSocket = io(socketUrl, {
       transports: ["websocket"],
+      path: "/socket.io/",
       reconnection: true,
+      upgrade: false,
     });
 
     newSocket.on("connect", () => {
       console.log("Conexión establecida a Socket.io en Seguimiento");
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("Error en conexión:", error);
+    });
+
+    newSocket.on("reconnect_attempt", (attempt) => {
+      console.log("Intento de reconexión:", attempt);
     });
 
     newSocket.on("message", (data) => {
