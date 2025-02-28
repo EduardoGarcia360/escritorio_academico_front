@@ -80,7 +80,7 @@ export default function AsignarActividadGestionar() {
         <form id="asignar-actividad" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="actividad" className="block text-sm font-medium text-gray-700">
-              Seleccione una Actividad
+              Seleccione una Actividad <span className="text-red-500">(*)</span>
             </label>
             <select
               id="actividad"
@@ -100,7 +100,7 @@ export default function AsignarActividadGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700">
-              Descripción
+              Descripción <span className="text-red-500">(*)</span>
             </label>
             <textarea
               id="descripcion"

@@ -84,7 +84,7 @@ export default function JornadaGestionar() {
         <form id="jornada" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
-              Nombre
+              Nombre <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -99,7 +99,7 @@ export default function JornadaGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="horario_inicio" className="block text-sm font-medium text-gray-700">
-              Horario de Inicio
+              Horario de Inicio <span className="text-red-500">(*)</span>
             </label>
             <input
               type="time"
@@ -113,7 +113,7 @@ export default function JornadaGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="horario_fin" className="block text-sm font-medium text-gray-700">
-              Horario de Fin
+              Horario de Fin <span className="text-red-500">(*)</span>
             </label>
             <input
               type="time"

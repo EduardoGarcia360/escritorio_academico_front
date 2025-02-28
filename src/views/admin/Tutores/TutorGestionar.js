@@ -76,7 +76,7 @@ export default function TutorGestionar() {
         <form id="tutor" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre_completo" className="block text-sm font-medium text-gray-700">
-              Nombre Completo
+              Nombre Completo <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -91,7 +91,7 @@ export default function TutorGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="identificacion" className="block text-sm font-medium text-gray-700">
-              Identificación
+              Identificación <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -106,10 +106,10 @@ export default function TutorGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="telefono" className="block text-sm font-medium text-gray-700">
-              Teléfono
+              Teléfono <span className="text-red-500">(*)</span>
             </label>
             <input
-              type="text"
+              type="number"
               id="telefono"
               name="telefono"
               value={formData.telefono}
@@ -131,12 +131,11 @@ export default function TutorGestionar() {
               onChange={handleChange}
               maxLength="100"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="direccion" className="block text-sm font-medium text-gray-700">
-              Dirección
+              Dirección <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -146,11 +145,12 @@ export default function TutorGestionar() {
               onChange={handleChange}
               maxLength="255"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="relacion_colegio" className="block text-sm font-medium text-gray-700">
-              Relación con el Colegio
+              Relación con el Colegio <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -160,6 +160,7 @@ export default function TutorGestionar() {
               onChange={handleChange}
               maxLength="50"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">

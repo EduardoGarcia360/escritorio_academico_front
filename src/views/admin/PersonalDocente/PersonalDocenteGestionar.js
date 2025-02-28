@@ -81,7 +81,7 @@ export default function PersonalDocenteGestionar() {
         <form id="personal-docente" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre_completo" className="block text-sm font-medium text-gray-700">
-              Nombre Completo
+              Nombre Completo <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -96,7 +96,7 @@ export default function PersonalDocenteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="identificacion" className="block text-sm font-medium text-gray-700">
-              Identificación
+              Identificación <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -111,7 +111,7 @@ export default function PersonalDocenteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="telefono" className="block text-sm font-medium text-gray-700">
-              Teléfono
+              Teléfono <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -121,6 +121,7 @@ export default function PersonalDocenteGestionar() {
               onChange={handleChange}
               maxLength="20"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
@@ -153,7 +154,7 @@ export default function PersonalDocenteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="titulo_academico" className="block text-sm font-medium text-gray-700">
-              Título Académico
+              Título Académico <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -163,11 +164,12 @@ export default function PersonalDocenteGestionar() {
               onChange={handleChange}
               maxLength="100"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="codigo_empleado" className="block text-sm font-medium text-gray-700">
-              Código de Empleado
+              Código de Empleado <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -177,11 +179,12 @@ export default function PersonalDocenteGestionar() {
               onChange={handleChange}
               maxLength="20"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="fecha_ingreso" className="block text-sm font-medium text-gray-700">
-              Fecha de Ingreso
+              Fecha de Ingreso <span className="text-red-500">(*)</span>
             </label>
             <input
               type="date"
@@ -190,6 +193,7 @@ export default function PersonalDocenteGestionar() {
               value={formData.fecha_ingreso}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
@@ -207,7 +211,7 @@ export default function PersonalDocenteGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="especialidad" className="block text-sm font-medium text-gray-700">
-              Especialidad
+              Especialidad <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -217,11 +221,12 @@ export default function PersonalDocenteGestionar() {
               onChange={handleChange}
               maxLength="50"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="estado_empleo" className="block text-sm font-medium text-gray-700">
-              Estado de Empleo
+              Estado de Empleo <span className="text-red-500">(*)</span>
             </label>
             <select
               id="estado_empleo"
@@ -229,6 +234,7 @@ export default function PersonalDocenteGestionar() {
               value={formData.estado_empleo}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             >
               <option value="A">Activo</option>
               <option value="L">Licencia</option>

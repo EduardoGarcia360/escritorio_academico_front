@@ -92,7 +92,7 @@ export default function CicloEscolarGestionar() {
         <form id="ciclo-escolar" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
-              Nombre
+              Nombre <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -107,7 +107,7 @@ export default function CicloEscolarGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">
-              Fecha de Inicio
+              Fecha de Inicio <span className="text-red-500">(*)</span>
             </label>
             <input
               type="date"
@@ -121,7 +121,7 @@ export default function CicloEscolarGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="fecha_fin" className="block text-sm font-medium text-gray-700">
-              Fecha de Fin
+              Fecha de Fin <span className="text-red-500">(*)</span>
             </label>
             <input
               type="date"
@@ -135,7 +135,7 @@ export default function CicloEscolarGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="estado" className="block text-sm font-medium text-gray-700">
-              Estado
+              Estado <span className="text-red-500">(*)</span>
             </label>
             <select
               id="estado"

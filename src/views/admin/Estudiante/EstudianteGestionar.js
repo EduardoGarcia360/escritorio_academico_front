@@ -124,6 +124,7 @@ export default function EstudianteGestionar() {
               value={formData.fecha_nacimiento}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
@@ -156,64 +157,8 @@ export default function EstudianteGestionar() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="telefono_contacto" className="block text-sm font-medium text-gray-700">
-              Teléfono de Contacto
-            </label>
-            <input
-              type="text"
-              id="telefono_contacto"
-              name="telefono_contacto"
-              value={formData.telefono_contacto}
-              onChange={handleChange}
-              maxLength="20"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="correo_electronico" className="block text-sm font-medium text-gray-700">
-              Correo Electrónico
-            </label>
-            <input
-              type="email"
-              id="correo_electronico"
-              name="correo_electronico"
-              value={formData.correo_electronico}
-              onChange={handleChange}
-              maxLength="100"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="nombre_tutor" className="block text-sm font-medium text-gray-700">
-              Nombre del Tutor
-            </label>
-            <input
-              type="text"
-              id="nombre_tutor"
-              name="nombre_tutor"
-              value={formData.nombre_tutor}
-              onChange={handleChange}
-              maxLength="100"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="telefono_tutor" className="block text-sm font-medium text-gray-700">
-              Teléfono del Tutor
-            </label>
-            <input
-              type="text"
-              id="telefono_tutor"
-              name="telefono_tutor"
-              value={formData.telefono_tutor}
-              onChange={handleChange}
-              maxLength="20"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-          </div>
-          <div className="mb-4">
             <label htmlFor="estado_matricula" className="block text-sm font-medium text-gray-700">
-              Estado de Matrícula
+              Estado de Matrícula <span className="text-red-500">(*)</span>
             </label>
             <select
               id="estado_matricula"
@@ -221,6 +166,7 @@ export default function EstudianteGestionar() {
               value={formData.estado_matricula}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             >
               <option value="A">Activo</option>
               <option value="R">Retirado</option>
@@ -239,6 +185,7 @@ export default function EstudianteGestionar() {
               onChange={handleChange}
               maxLength="20"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">

@@ -83,7 +83,7 @@ export default function GradoGestionar() {
         <form id="grado" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
-              Nombre
+              Nombre <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
@@ -98,7 +98,7 @@ export default function GradoGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="seccion" className="block text-sm font-medium text-gray-700">
-              Sección
+              Sección <span className="text-red-500">(*)</span>
             </label>
             <select
               id="seccion"
