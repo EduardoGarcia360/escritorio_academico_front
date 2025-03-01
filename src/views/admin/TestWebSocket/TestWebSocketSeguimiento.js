@@ -57,7 +57,8 @@ const SeguimientoWS = () => {
   };
 
   const handleSave = async (locationValues) => {
-    const location = JSON.parse(locationValues);
+    const location = JSON.parse(`[${locationValues}]`);
+    console.log('LOCATION PARSE', location)
     const formData = {
       id_asignacion_transporte: 1,
       latitud: location.latitude,
@@ -70,6 +71,7 @@ const SeguimientoWS = () => {
       bearing: location.bearing,
       time: location.time
     }
+    console.log('FORM DATA', formData)
     const response = await api.post('coordenadasbus/', formData)
     console.log('INSERCION', JSON.stringify(response.data));
   };
