@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 import { descifrarString } from 'services/codificar.js';
+import { api } from "services/api";
 
 const SeguimientoWS = () => {
   const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
@@ -32,6 +33,7 @@ const SeguimientoWS = () => {
       console.log("Mensaje recibido en Seguimiento:", data);
       const decodeData = descifrarString(data);
       console.log('decodeData', decodeData);
+      handleSave(decodeData);
       setMessages((prev) => [...prev, decodeData || data]);
     });
 
@@ -52,6 +54,24 @@ const SeguimientoWS = () => {
     } else {
       console.error("Socket no está conectado");
     }
+  };
+
+  const handleSave = async (locationValues) => {
+    const location = JSON.parse(locationValues);
+    const formData = {
+      id_asignacion_transporte: 1,
+      latitud: location.latitude,
+      longitud: location.longitude,
+      accuracy: location.accuracy,
+      altitude: location.altitude,
+      altitude_accuracy: location.altitude_accuracy,
+      simulated: location.simulated,
+      speed: location.speed,
+      bearing: location.bearing,
+      time: location.time
+    }
+    const response = await api.post('coordenadasbus/', formData)
+    console.log('INSERCION', JSON.stringify(response.data));
   };
 
   return (
