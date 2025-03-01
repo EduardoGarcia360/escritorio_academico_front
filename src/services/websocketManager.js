@@ -102,8 +102,10 @@ class WebSocketManager {
   // Envía un mensaje que incluye fecha y hora actual
   enviarMensajeConFecha(location) {
     const ahora = new Date();
-    const texto = cifrarString(`socket ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}:`);
-    const mensaje = JSON.stringify({ texto: texto, location: location })
+    const texto = `socket ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}:`;
+    const locationString = JSON.stringify(location);
+    const objCifrar = JSON.stringify({ texto: texto, location: locationString })
+    const mensaje = cifrarString(objCifrar);
 
     this.enviarRegistro({ mensaje });
     console.log("Enviando mensaje:", mensaje);
