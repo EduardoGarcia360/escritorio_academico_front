@@ -76,7 +76,7 @@ const SeguimientoWS = () => {
           <h2 className="text-xl font-semibold mb-2">Mensajes en {currentRoom}</h2>
           <ul className="list-disc pl-5">
             {messages.map((msg, index) => (
-              <li key={index}>{msg}</li>
+              <li style={{ listStyleType: 'square' }} key={index}>{msg}</li>
             ))}
           </ul>
         </div>
