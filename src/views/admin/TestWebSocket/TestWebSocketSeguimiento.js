@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 import { descifrarString } from 'services/codificar.js';
+import { api } from "services/api";
 
 const SeguimientoWS = () => {
   const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
@@ -11,17 +12,28 @@ const SeguimientoWS = () => {
   useEffect(() => {
     const newSocket = io(socketUrl, {
       transports: ["websocket"],
+      path: "/socket.io/",
       reconnection: true,
+      upgrade: false,
     });
 
     newSocket.on("connect", () => {
       console.log("Conexión establecida a Socket.io en Seguimiento");
     });
 
+    newSocket.on("connect_error", (error) => {
+      console.error("Error en conexión:", error);
+    });
+
+    newSocket.on("reconnect_attempt", (attempt) => {
+      console.log("Intento de reconexión:", attempt);
+    });
+
     newSocket.on("message", (data) => {
       console.log("Mensaje recibido en Seguimiento:", data);
       const decodeData = descifrarString(data);
       console.log('decodeData', decodeData);
+      handleSave(decodeData);
       setMessages((prev) => [...prev, decodeData || data]);
     });
 
@@ -42,6 +54,24 @@ const SeguimientoWS = () => {
     } else {
       console.error("Socket no está conectado");
     }
+  };
+
+  const handleSave = async (locationValues) => {
+    const location = JSON.parse(locationValues);
+    const formData = {
+      id_asignacion_transporte: 1,
+      latitud: location.latitude,
+      longitud: location.longitude,
+      accuracy: location.accuracy,
+      altitude: location.altitude,
+      altitude_accuracy: location.altitude_accuracy,
+      simulated: location.simulated,
+      speed: location.speed,
+      bearing: location.bearing,
+      time: location.time
+    }
+    const response = await api.post('coordenadasbus/', formData)
+    console.log('INSERCION', JSON.stringify(response.data));
   };
 
   return (
@@ -66,7 +96,7 @@ const SeguimientoWS = () => {
           <h2 className="text-xl font-semibold mb-2">Mensajes en {currentRoom}</h2>
           <ul className="list-disc pl-5">
             {messages.map((msg, index) => (
-              <li key={index}>{msg}</li>
+              <li style={{ listStyleType: 'square' }} key={index}>{msg}</li>
             ))}
           </ul>
         </div>

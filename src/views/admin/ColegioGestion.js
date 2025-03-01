@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { api } from "services/api";
 
 export default function ColegioGestion() {
-  // const history = useHistory();
+  const history = useHistory();
   const [hasMounted, setHasMounted] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
@@ -23,20 +23,23 @@ export default function ColegioGestion() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log("Formulario guardado:", formData);
+    // console.log("Formulario guardado:", formData);
     const response = await api.put('colegios/', formData)
-    console.log('Colegio upd', response)
-    // history.push("/admin/dashboard");
+    // console.log('Colegio upd', response)
+    if (response.status === 200) {
+      alert(response.data.message);
+      history.push("/admin/dashboard");
+    }
   };
 
   const handleCancel = () => {
-    console.log("Acción cancelada:", formData);
-    // history.push("/admin/dashboard");
+    // console.log("Acción cancelada:", formData);
+    history.push("/admin/dashboard");
   };
 
   const getColegio = async () => {
     const response = await api.get('colegios/')
-    console.log('Colegio', response)
+    // console.log('Colegio', response)
     setFormData(response.data)
   }
 
@@ -53,7 +56,7 @@ export default function ColegioGestion() {
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
       <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-        <h1 className="text-2xl font-bold mb-6">Información del Colegio TMP</h1>
+        <h1 className="text-2xl font-bold mb-6">Información del Colegio</h1>
         <form id="formColegio" onSubmit={handleSave}>
           {/* Nombre */}
           <div className="mb-4">
@@ -61,7 +64,7 @@ export default function ColegioGestion() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="nombre"
             >
-              Nombre
+              Nombre <span className="text-red-500">(*)</span>
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -70,6 +73,7 @@ export default function ColegioGestion() {
               name="nombre"
               value={formData.nombre}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -79,7 +83,7 @@ export default function ColegioGestion() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="direccion"
             >
-              Dirección
+              Dirección <span className="text-red-500">(*)</span>
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -88,6 +92,7 @@ export default function ColegioGestion() {
               name="direccion"
               value={formData.direccion}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -97,7 +102,7 @@ export default function ColegioGestion() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="telefono"
             >
-              Teléfono
+              Teléfono <span className="text-red-500">(*)</span>
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -106,6 +111,7 @@ export default function ColegioGestion() {
               name="telefono"
               value={formData.telefono}
               onChange={handleChange}
+              required
             />
           </div>
 
@@ -187,7 +193,7 @@ export default function ColegioGestion() {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="director"
             >
-              Director
+              Director <span className="text-red-500">(*)</span>
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -196,6 +202,7 @@ export default function ColegioGestion() {
               name="director"
               value={formData.director}
               onChange={handleChange}
+              required
             />
           </div>
 

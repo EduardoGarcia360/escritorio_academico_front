@@ -1,6 +1,10 @@
 // /src/services/websocketManager.js
 import { io } from "socket.io-client";
 import { cifrarString } from "./codificar.js";
+// import { registerPlugin } from '@capacitor/core'
+
+// const backGeolocation = registerPlugin('BackgroundGeolocation');
+const backGeolocation = null;
 
 class WebSocketManager {
   constructor(url, roomId = null) {
@@ -8,13 +12,16 @@ class WebSocketManager {
     this.socket = null;
     this.intervalId = null;
     this.roomId = roomId;
+    this.idBackGeolocation = null;
   }
 
   // Inicia la conexión con Socket.io
   conectar() {
     this.socket = io(this.url, {
       transports: ["websocket"],
+      path: "/socket.io/",
       reconnection: true,
+      upgrade: false,
     });
 
     this.socket.on("connect", () => {
@@ -68,14 +75,15 @@ class WebSocketManager {
     if (this.socket) {
       this.socket.disconnect();
     }
+    console.log('_____ CERRAR ID PARA EL BACKGROUND', this.idBackGeolocation)
+    if (this.idBackGeolocation) {
+      backGeolocation.removeWatcher({ id: this.idBackGeolocation });
+    }
   }
 
   // Inicia el envío periódico cada 30 segundos
   iniciarEnvioPeriodo() {
-    this.enviarMensajeConFecha();
-    this.intervalId = setInterval(() => {
-      this.enviarMensajeConFecha();
-    }, 30000);
+    this.iniciarBackGeolocation();
   }
 
   // Detiene el envío periódico
@@ -85,14 +93,45 @@ class WebSocketManager {
       this.intervalId = null;
       console.log("Envío periódico detenido");
     }
+    console.log('_____ CERRAR ID PARA EL BACKGROUND', this.idBackGeolocation)
+    if (this.idBackGeolocation) {
+      backGeolocation.removeWatcher({ id: this.idBackGeolocation });
+    }
   }
 
   // Envía un mensaje que incluye fecha y hora actual
-  enviarMensajeConFecha() {
+  enviarMensajeConFecha(locationResult) {
     const ahora = new Date();
-    const mensaje = cifrarString(`hola desde socket con ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`);
+    const mensaje = cifrarString(`socket ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}: ${locationResult}`);
     this.enviarRegistro({ mensaje });
     console.log("Enviando mensaje:", mensaje);
+  }
+
+  async iniciarBackGeolocation() {
+    console.log('***** iniciarBackGeolocation *****')
+    const idWatchLocation = await backGeolocation.addWatcher(
+      {
+        interval: 30000, //El intervalo en el que se comprueba la localización.
+        backgroundMessage: "Obteniendo ubicación...",
+        backgroundTitle: "Seguimiento Activo",
+        requestPermissions: true,
+        stale: false,
+      },
+      async (location) => {
+        if (location !== null) {
+          const ahora = new Date();
+          console.log(`obteniendo la ubicación ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`);
+          const cleanLocation = { latitude: location.latitude, longitude: location.longitude, simulated: location.simulated }
+          console.log('CLEAN', JSON.stringify(cleanLocation));
+          const locationResult = JSON.stringify(location);
+          console.log('ubicación', locationResult)
+          this.enviarMensajeConFecha(locationResult);
+        }
+      }
+    ).then((watcher_id) =>  {
+      console.log('_____ ID PARA EL BACKGROUND', watcher_id)
+      this.idBackGeolocation = watcher_id
+    })
   }
 }
 

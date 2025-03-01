@@ -63,7 +63,7 @@ export default function NivelEducacionGestionar() {
         <form id="nivel-educacion" onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-4">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
-              Nombre
+              Nombre <span className="text-red-500">(*)</span>
             </label>
             <input
               type="text"
