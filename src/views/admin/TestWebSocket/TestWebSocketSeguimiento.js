@@ -37,7 +37,7 @@ const SeguimientoWS = () => {
       const dataParse = JSON.parse(decodeData);
       console.log('dataParse', dataParse);
 
-      const logPagina = `${dataParse.texto} ${JSON.stringify(dataParse.location)}`;
+      const logPagina = `${dataParse.texto} ${dataParse.location}`;
 
       handleSave(dataParse.location);
       setMessages((prev) => [...prev, logPagina || data]);
@@ -62,9 +62,9 @@ const SeguimientoWS = () => {
     }
   };
 
-  const handleSave = async (location) => {
-    // const location = JSON.parse(locationValues);
-    console.log('LOCATION PARSE', location)
+  const handleSave = async (strLocation) => {
+    const location = JSON.parse(strLocation);
+    console.log('handleSave', location)
     const formData = {
       id_asignacion_transporte: 1,
       latitud: location.latitude,
