@@ -26,6 +26,7 @@
     "tailwindcss": "2.0.4"
   },
   "scripts": {
+    "startdev": "cross-env NODE_ENV=development react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build && gulp licenses",
     "test": "react-scripts test",
@@ -50,5 +51,8 @@
   },
   "optionalDependencies": {
     "typescript": "4.2.3"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
