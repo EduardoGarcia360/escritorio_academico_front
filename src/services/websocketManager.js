@@ -100,9 +100,11 @@ class WebSocketManager {
   }
 
   // Envía un mensaje que incluye fecha y hora actual
-  enviarMensajeConFecha(locationResult) {
+  enviarMensajeConFecha(location) {
     const ahora = new Date();
-    const mensaje = cifrarString(`socket ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}: ${locationResult}`);
+    const texto = cifrarString(`socket ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}:`);
+    const mensaje = JSON.stringify({ texto: texto, location: location })
+
     this.enviarRegistro({ mensaje });
     console.log("Enviando mensaje:", mensaje);
   }
@@ -121,11 +123,8 @@ class WebSocketManager {
         if (location !== null) {
           const ahora = new Date();
           console.log(`obteniendo la ubicación ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`);
-          const cleanLocation = { latitude: location.latitude, longitude: location.longitude, simulated: location.simulated }
-          console.log('CLEAN', JSON.stringify(cleanLocation));
-          const locationResult = JSON.stringify(location);
-          console.log('ubicación', locationResult)
-          this.enviarMensajeConFecha(locationResult);
+          console.log('ubicación', JSON.stringify(location))
+          this.enviarMensajeConFecha(location);
         }
       }
     ).then((watcher_id) =>  {

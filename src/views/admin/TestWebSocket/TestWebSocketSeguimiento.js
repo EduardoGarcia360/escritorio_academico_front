@@ -33,8 +33,14 @@ const SeguimientoWS = () => {
       console.log("Mensaje recibido en Seguimiento:", data);
       const decodeData = descifrarString(data);
       console.log('decodeData', decodeData);
-      handleSave(decodeData);
-      setMessages((prev) => [...prev, decodeData || data]);
+
+      const dataParse = JSON.parse(decodeData);
+      console.log('dataParse', dataParse);
+
+      const logPagina = `${dataParse.texto} ${JSON.stringify(dataParse.location)}`;
+
+      handleSave(dataParse.location);
+      setMessages((prev) => [...prev, logPagina || data]);
     });
 
     setSocket(newSocket);
@@ -56,8 +62,8 @@ const SeguimientoWS = () => {
     }
   };
 
-  const handleSave = async (locationValues) => {
-    const location = JSON.parse(`[${locationValues}]`);
+  const handleSave = async (location) => {
+    // const location = JSON.parse(locationValues);
     console.log('LOCATION PARSE', location)
     const formData = {
       id_asignacion_transporte: 1,
