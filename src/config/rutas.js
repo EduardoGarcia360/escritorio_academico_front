@@ -40,6 +40,8 @@ import UsuarioPrincipal from "views/admin/Usuario/UsuarioPrincipal.js";
 import UsuarioGestionar from "views/admin/Usuario/UsuarioGestionar.js";
 import IniciarWS from "views/admin/TestWebSocket/TestWebSocketPrincipal.js";
 import SeguimientoWS from "views/admin/TestWebSocket/TestWebSocketSeguimiento.js";
+import RegistroHorarioBusPrincipal from "views/admin/RegistroHorarioBus/RegistroHorarioBusPrincipal.js";
+import RegistroHorarioBusGestionar from "views/admin/RegistroHorarioBus/RegistroHorarioBusGestionar.js";
 
 export const rutas = [
   {
@@ -430,5 +432,23 @@ export const rutas = [
     roles: ["A"],
     hideInSidebar: false,
     component: SeguimientoWS,
+  },
+  {
+    key: 43,
+    path: "/admin/RegistroHorarioBus/RegistroHorarioBusPrincipal",
+    name: "Registro Horario Bus",
+    icon: "fa-solid fa-star",
+    roles: ["A"],
+    hideInSidebar: false,
+    component: RegistroHorarioBusPrincipal,
+  },
+  {
+    key: 44,
+    path: "/admin/RegistroHorarioBus/RegistroHorarioBusGestionar/:idAsignacionTransporte",
+    name: "RegistroHorarioBusGestionar",
+    icon: "fa-solid fa-star",
+    roles: ["A"],
+    hideInSidebar: true,
+    component: RegistroHorarioBusGestionar,
   },
 ];
