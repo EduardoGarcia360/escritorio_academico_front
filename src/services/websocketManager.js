@@ -1,6 +1,7 @@
 // /src/services/websocketManager.js
 import { io } from "socket.io-client";
 import { cifrarString } from "./codificar.js";
+import { api } from "./api.js";
 // import { registerPlugin } from '@capacitor/core'
 
 // const backGeolocation = registerPlugin('BackgroundGeolocation');
@@ -99,21 +100,45 @@ class WebSocketManager {
     }
   }
 
+  getIdAsignacionTransporte() {
+    const partes = this.roomId.split('-')
+    return partes[1]
+  }
+
+  async guardarUbicacion(location) {
+    console.log('handleSave', location)
+    const formData = {
+      id_asignacion_transporte: this.getIdAsignacionTransporte(),
+      latitud: location.latitude,
+      longitud: location.longitude,
+      accuracy: location.accuracy,
+      altitude: location.altitude,
+      altitude_accuracy: location.altitude_accuracy,
+      simulated: location.simulated,
+      speed: location.speed,
+      bearing: location.bearing,
+      time: location.time
+    }
+    console.log('FORM DATA', formData)
+    const response = await api.post('coordenadasbus/', formData)
+    console.log('INSERCION', JSON.stringify(response.data));
+  }
+
   // Envía un mensaje que incluye fecha y hora actual
   enviarMensajeConFecha(location) {
     const ahora = new Date();
-    const texto = `socket ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}:`;
+    const texto = `WebSocket: enviado el ${ahora.toLocaleDateString()} a las ${ahora.toLocaleTimeString()}`;
     const locationString = JSON.stringify(location);
     const objCifrar = JSON.stringify({ texto: texto, location: locationString })
     const mensaje = cifrarString(objCifrar);
-
+    this.guardarUbicacion(location);
     this.enviarRegistro({ mensaje });
     console.log("Enviando mensaje:", mensaje);
   }
 
   async iniciarBackGeolocation() {
     console.log('***** iniciarBackGeolocation *****')
-    const idWatchLocation = await backGeolocation.addWatcher(
+    await backGeolocation.addWatcher(
       {
         interval: 30000, //El intervalo en el que se comprueba la localización.
         backgroundMessage: "Obteniendo ubicación...",

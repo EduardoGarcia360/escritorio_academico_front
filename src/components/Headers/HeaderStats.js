@@ -13,7 +13,7 @@ export default function HeaderStats() {
       objParams: {},
     };
     const response = await api.post("execute-procedure", params);
-    console.log('stats', response)
+    // console.log('stats', response)
     if (response.status === 200) {
       setValores(response.data.results[0]);
     } else {
