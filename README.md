@@ -5,7 +5,7 @@ Escritorio Académico es una plataforma web diseñada para la gestión y adminis
 - node v22.11.0+
 - npm v10.9.1+
 - npm i
-- npm start
+- npm startdev
 
 # Generación de Android
 - npm install -g @capacitor/cli

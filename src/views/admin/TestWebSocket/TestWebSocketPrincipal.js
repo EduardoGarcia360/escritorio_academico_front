@@ -1,11 +1,8 @@
-// /src/views/ActividadEscolar/Principal.js
-
 import React, { useState, useEffect } from 'react';
 import WebSocketManager from 'services/websocketManager.js';
 
 const IniciarWS = () => {
-  // Nota: Para Socket.io, es recomendable usar la URL con protocolo HTTPS
-  const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
+  const socketUrl = process.env.REACT_APP_SOCKET_URL;
   const [wsManager, setWsManager] = useState(null);
 
   const iniciarViaje = () => {

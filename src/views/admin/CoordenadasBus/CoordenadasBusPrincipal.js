@@ -7,11 +7,18 @@ import { api } from "services/api";
 import goalIconUrl from "assets/img/goal.png";
 import busIconUrl from "assets/img/bus.png";
 import noLocationsIconUrl from "assets/img/no_locations.png";
+import { io } from "socket.io-client";
+import { descifrarString } from 'services/codificar.js';
 
 export default function CoordenadasBusPrincipal() {
   const [hasMounted, setHasMounted] = useState(false);
   const [coordinates, setCoordinates] = useState([]);
   const history = useHistory();
+  const socketUrl = process.env.REACT_APP_SOCKET_URL;
+  const [socket, setSocket] = useState(null);
+  const [registroActividad, setRegistroActividad] = useState({ estado: "F" });
+  const [conexionEstablecida, setConexionEstablecida] = useState(false);
+  const [codigoSala, setCodigoSala] = useState(null);
   const { idCiclo, idJornadaCiclo, idGrado, idAsignacion, idTransporte } =
     useParams();
 
@@ -48,6 +55,79 @@ export default function CoordenadasBusPrincipal() {
   });
 
   useEffect(() => {
+    const newSocket = io(socketUrl, {
+      transports: ["websocket"],
+      path: "/socket.io/",
+      reconnection: true,
+      upgrade: false,
+    });
+
+    newSocket.on("connect", () => {
+      console.log("Conexión establecida a Socket.io en Seguimiento");
+      setConexionEstablecida(true);
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("Error en conexión:", error);
+    });
+
+    newSocket.on("reconnect_attempt", (attempt) => {
+      console.log("Intento de reconexión:", attempt);
+    });
+
+    newSocket.on("message", (data) => {
+      if (data) {
+        console.log("Mensaje recibido en Seguimiento:", data, typeof data);
+        const decodeData = descifrarString(data);
+        console.log('decodeData', decodeData);
+
+        if (decodeData) {
+          const dataParse = JSON.parse(decodeData);
+          console.log('dataParse', dataParse);
+
+          // const logPagina = `${dataParse.texto} ${dataParse.location}`;
+
+          // handleSave(dataParse.location);
+        }
+      }
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [socketUrl]);
+
+  useEffect(() => {
+    if (hasMounted && codigoSala && conexionEstablecida) {
+      joinRoom(codigoSala);
+    }
+  }, [hasMounted, codigoSala, conexionEstablecida]);
+
+  const fetchCoordinates = async () => {
+    try {
+      const response = await api.get(
+        `coordenadasbus/transporte/${idTransporte}`
+      );
+      console.log("ubis", response);
+      if (response.data.length === 0) {
+        setCoordinates([]);
+      } else {
+        const tmp = response.data.map((location) => ({
+          ...location,
+          lat: location.latitud,
+          lng: location.longitud,
+        }));
+        // console.log("tmp", tmp);
+        setCoordinates(tmp);
+      }
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+    }
+  };
+
+  useEffect(() => {
     if (
       !idCiclo ||
       !idJornadaCiclo ||
@@ -59,36 +139,38 @@ export default function CoordenadasBusPrincipal() {
       return;
     }
 
-    const fetchCoordinates = async () => {
-      try {
-        const response = await api.get(
-          `coordenadasbus/transporte/${idTransporte}`
-        );
-        // console.log("ubis", response);
-        if (response.data.length === 0) {
-          setCoordinates([]);
-        } else {
-          const tmp = response.data.map((location) => ({
-            ...location,
-            lat: location.latitud,
-            lng: location.longitud,
-          }));
-          // console.log("tmp", tmp);
-          setCoordinates(tmp);
-        }
-
-        setHasMounted(true);
-      } catch (error) {
-        console.error("Error fetching coordinates:", error);
-      }
+    const consultarRegistro = async () => {
+      const response = await api.get(
+        `asignacionestransporteextra/${idTransporte}`
+      );
+      console.log("registro", response);
+      const actividad = response.data;
+      setRegistroActividad(actividad);
+      setCodigoSala(
+        `ACTIVIDAD-${actividad.id_asignacion_transporte}-${actividad.id_asignacion}-${actividad.id_bus}-${actividad.id_docente}`
+      );
+      setHasMounted(true);
     };
 
+    consultarRegistro();
     fetchCoordinates();
   }, [idCiclo, idJornadaCiclo, idGrado, idAsignacion, idTransporte, history]);
 
   if (!hasMounted) {
     return null; // Esperar hasta que los datos estén disponibles
   }
+
+  const joinRoom = (roomId) => {
+    if (socket && socket.connected) {
+      socket.emit("joinRoom", roomId);
+      // setCurrentRoom(roomId);
+      console.log(`Unido a la sala ${roomId}`);
+      // Limpiamos los mensajes al cambiar de room
+      // setMessages([]);
+    } else {
+      console.error("Socket no está conectado");
+    }
+  };
 
   const initialCoordinates =
     coordinates.length === 0 ? undefined : coordinates[0];

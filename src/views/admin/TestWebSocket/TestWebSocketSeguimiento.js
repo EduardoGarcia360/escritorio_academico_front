@@ -4,7 +4,7 @@ import { descifrarString } from 'services/codificar.js';
 import { api } from "services/api";
 
 const SeguimientoWS = () => {
-  const socketUrl = "https://escritorioacademicoapi-production.up.railway.app/";
+  const socketUrl = process.env.REACT_APP_SOCKET_URL;
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [currentRoom, setCurrentRoom] = useState("");
@@ -30,6 +30,7 @@ const SeguimientoWS = () => {
     });
 
     newSocket.on("message", (data) => {
+      if (!data) return;
       console.log("Mensaje recibido en Seguimiento:", data);
       const decodeData = descifrarString(data);
       console.log('decodeData', decodeData);
