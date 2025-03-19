@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { api } from "services/api";
 import { formatearFechaDateTime } from "services/utils.js";
 import WebSocketManager from "services/websocketManager.js";
+import { getUserLocation } from "services/location.js";
 
 export default function RegistroHorarioBusGestionar() {
   const { idAsignacionTransporte } = useParams();
@@ -114,18 +115,25 @@ export default function RegistroHorarioBusGestionar() {
 
     // se valida el envio del socket
     if (boton === "iniciar" || boton === "retorno") {
-      iniciarViaje();
+      iniciarViaje(boton === "iniciar" ? "I" : "V");
     } else if (boton === "llegada" || boton === "finalizar") {
       detenerViaje();
     }
   };
 
   const handleSaveRegistro = async (tipoRegistro, esFinalizar) => {
+    const userLocation = await getUserLocation();
+    let latitud = null;
+    let longitud = null;
+    if (userLocation.status === "OK") {
+      latitud = userLocation.latitude;
+      longitud = userLocation.longitude;
+    }
     const formData = {
       id_asignacion_transporte: idAsignacionTransporte,
       tipo_registro: tipoRegistro,
-      latitud: null,
-      longitud: null,
+      latitud: latitud,
+      longitud: longitud,
       observaciones: null,
       estado: esFinalizar ? "F" : "A",
     };
@@ -154,20 +162,20 @@ export default function RegistroHorarioBusGestionar() {
     )}${finalizado}`;
   };
 
-  const iniciarViaje = () => {
+  const iniciarViaje = (tipoUbicacion) => {
     // Si no existe el manager, se crea y se conecta
     if (!wsManager) {
-      const manager = new WebSocketManager(socketUrl, codigoSala);
+      const manager = new WebSocketManager(socketUrl, codigoSala, tipoUbicacion);
       manager.conectar();
       setWsManager(manager);
       // Una vez conectados, iniciar el envío periódico
       manager.socket.on("connect", () => {
-        manager.iniciarEnvioPeriodo();
+        manager.iniciarEnvioPeriodo(tipoUbicacion);
       });
     } else {
       // Si ya existe, reiniciar el envío periódico si está detenido
       if (!wsManager.intervalId) {
-        wsManager.iniciarEnvioPeriodo();
+        wsManager.iniciarEnvioPeriodo(tipoUbicacion);
         console.log("Reiniciando envío periódico");
       }
     }
