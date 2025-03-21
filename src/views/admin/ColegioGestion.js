@@ -29,6 +29,8 @@ export default function ColegioGestion() {
     if (response.status === 200) {
       alert(response.data.message);
       history.push("/admin/dashboard");
+    } else {
+      alert(response.data.message)
     }
   };
 

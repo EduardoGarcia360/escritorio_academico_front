@@ -52,9 +52,13 @@ export default function EstudiantePrincipal() {
     if (confirmar) {
       try {
         const objParam = { estado_matricula: "R" };
-        await api.put(`estudiantes/inactivar/${id}`, objParam);
-        alert("Registro eliminado correctamente.");
-        getDatos(); // Refrescar los datos después de eliminar
+        const response = await api.put(`estudiantes/inactivar/${id}`, objParam);
+        if (response.status === 200) {
+          alert("Registro eliminado correctamente.");
+          getDatos(); // Refrescar los datos después de eliminar
+        } else {
+          alert(response.data.message)
+        }
       } catch (error) {
         console.error("Error al eliminar estudiante:", error);
         alert("Ocurrió un error al intentar eliminar el registro.");

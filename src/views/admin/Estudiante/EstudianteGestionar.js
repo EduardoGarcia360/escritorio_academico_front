@@ -51,6 +51,8 @@ export default function EstudianteGestionar() {
         if (response.status === 200) {
           alert('Registro actualizado exitosamente');
           history.push('/admin/EstudiantePrincipal');
+        } else {
+          alert(response.data.message)
         }
       } else {
         const response = await api.post('estudiantes/', formData);

@@ -14,6 +14,8 @@ export default function TutorGestionar() {
   }, [id, history]);
 
   const [formData, setFormData] = useState({
+    contrasena: '',
+    confirmarContrasena: '',
     nombre_completo: '',
     identificacion: '',
     telefono: '',
@@ -22,6 +24,8 @@ export default function TutorGestionar() {
     relacion_colegio: '',
     es_responsable_principal: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,13 +42,24 @@ export default function TutorGestionar() {
       const payload = { ...formData, id_estudiante: id };
 
       if (idTutor) {
-        await api.put(`tutores/${idTutor}`, payload);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`tutores/${idTutor}`, payload);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push(`/admin/Tutores/TutorPrincipal/${id}`);
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('tutores/', payload);
-        alert('Registro creado exitosamente');
+        const response = await api.post('tutores/', payload);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push(`/admin/Tutores/TutorPrincipal/${id}`);
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push(`/admin/Tutores/TutorPrincipal/${id}`);
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');
@@ -121,7 +136,7 @@ export default function TutorGestionar() {
           </div>
           <div className="mb-4">
             <label htmlFor="correo_electronico" className="block text-sm font-medium text-gray-700">
-              Correo Electrónico
+              Correo Electrónico <span className="text-red-500">(*)</span>
             </label>
             <input
               type="email"
@@ -131,6 +146,7 @@ export default function TutorGestionar() {
               onChange={handleChange}
               maxLength="100"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
           </div>
           <div className="mb-4">
@@ -163,19 +179,82 @@ export default function TutorGestionar() {
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="es_responsable_principal" className="block text-sm font-medium text-gray-700">
-              Es Responsable Principal
-            </label>
+          <div className="mb-4 flex items-center">
             <input
               type="checkbox"
               id="es_responsable_principal"
               name="es_responsable_principal"
               checked={formData.es_responsable_principal}
               onChange={handleChange}
-              className="mt-1"
+              className="mt-1 mr-2"
             />
+            <label htmlFor="es_responsable_principal" className="text-sm font-medium text-gray-700">
+              Es Responsable Principal
+            </label>
           </div>
+          
+          {(idTutor && changePassword) || !idTutor ? (
+            <>
+              <div className="mb-4">
+                <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700">
+                  Contraseña <span className="text-red-500">(*)</span>
+                </label>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="contrasena"
+                  name="contrasena"
+                  value={formData.contrasena}
+                  onChange={handleChange}
+                  maxLength="255"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="confirmarContrasena" className="block text-sm font-medium text-gray-700">
+                  Confirmar Contraseña <span className="text-red-500">(*)</span>
+                </label>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="confirmarContrasena"
+                  name="confirmarContrasena"
+                  value={formData.confirmarContrasena}
+                  onChange={handleChange}
+                  maxLength="255"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+              <div className="mb-4 flex items-center">
+                <input
+                  type="checkbox"
+                  id="showPassword"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(!showPassword)}
+                  className="mr-2"
+                />
+                <label htmlFor="showPassword" className="text-sm font-medium text-gray-700">
+                  Mostrar Contraseña
+                </label>
+              </div>
+            </>
+          ) : null}
+
+          {idTutor && (
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="changePassword"
+                checked={changePassword}
+                onChange={() => setChangePassword(!changePassword)}
+                className="mr-2"
+              />
+              <label htmlFor="changePassword" className="text-sm font-medium text-gray-700">
+                ¿Desea cambiar su contraseña?
+              </label>
+            </div>
+          )}
+
           <div className="flex items-center justify-between">
             <button
               type="submit"

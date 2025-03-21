@@ -46,13 +46,24 @@ export default function JornadaGestionar() {
       const payload = { ...formData, id_nivel: id };
 
       if (idJornada) {
-        await api.put(`jornadas/${idJornada}`, payload);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`jornadas/${idJornada}`, payload);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push(`/admin/Jornada/JornadaPrincipal/${id}`);
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('jornadas/', payload);
-        alert('Registro creado exitosamente');
+        const response = await api.post('jornadas/', payload);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push(`/admin/Jornada/JornadaPrincipal/${id}`);
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push(`/admin/Jornada/JornadaPrincipal/${id}`);
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');
