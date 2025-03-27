@@ -32,6 +32,8 @@ export default function Login() {
       }
       setCookie('userProperties', cifrarObjetoGeneral(userProperties))
       history.push("/admin/dashboard");
+    } else {
+      alert(response.data.message);
     }
   };
 
