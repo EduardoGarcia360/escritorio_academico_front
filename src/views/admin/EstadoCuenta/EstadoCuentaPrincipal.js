@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { api } from "services/api";
+import { getFormatRandomName } from "services/utils";
+var pdfMake = require('pdfmake/build/pdfmake.js');
+var pdfFonts = require('pdfmake/build/vfs_fonts.js');
+pdfMake.addVirtualFileSystem(pdfFonts);
 
 export default function EstadoCuentaPrincipal() {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -11,7 +15,11 @@ export default function EstadoCuentaPrincipal() {
     try {
       const response = await api.get("estudiantes/usuariotutor/1");
       console.log('fetchEstudiantes', response);
-      setEstudiantes(response.data);
+      if (response.status === 200) {
+        setEstudiantes(response.data);
+      } else {
+        setEstudiantes([]);
+      }
     } catch (error) {
       console.error("Error al obtener los estudiantes:", error);
       alert("No se pudieron cargar los estudiantes.");
@@ -41,7 +49,11 @@ export default function EstadoCuentaPrincipal() {
       };
       const response = await api.post("execute-procedure", params);
       console.log('handleBuscar', response);
-      setEstadoCuenta(response.data.results);
+      if (response.status === 200) {
+        setEstadoCuenta(response.data.results);
+      } else {
+        setEstadoCuenta([]);
+      }
     } catch (error) {
       console.error("Error al obtener el estado de cuenta:", error);
       alert("No se pudo obtener el estado de cuenta del estudiante.");
@@ -82,9 +94,156 @@ export default function EstadoCuentaPrincipal() {
     return date.toLocaleDateString();
   };
 
+  const generarPDF = async () => {
+    if (estadoCuenta.length === 0) {
+      alert("No hay valores consultados.");
+      return;
+    }
+
+    // se consultan los valores para el pdf
+    const params = {
+      procedureName: "valoresEstudianteColegioEstadoCuentaPadre",
+      params: ["id_estudiante", "id_colegio"],
+      objParams: { id_estudiante: idEstudiante },
+    };
+    const response = await api.post("execute-procedure", params);
+    console.log('generarPDF', response);
+
+    if (response.status !== 200) {
+      alert("No se pudieron obtener los valores para el PDF.");
+      return;
+    }
+
+    const values = response.data.results[0];
+  
+    const body = [
+      [
+        "Periodo",
+        "Monto",
+        "Estado",
+        "Fecha Venc.",
+        "Monto Pagado",
+        "Fecha Pago",
+        "No. Boleta",
+        "Fecha Boleta",
+      ],
+      ...estadoCuenta.map((cuota) => [
+        cuota.periodo,
+        cuota.monto,
+        {
+          text:
+            cuota.estado === "P"
+              ? "Pendiente"
+              : cuota.estado === "R"
+              ? "Parcial"
+              : cuota.estado === "G"
+              ? "Pagada"
+              : "Desconocido",
+          color:
+            cuota.estado === "P"
+              ? "red"
+              : cuota.estado === "G"
+              ? "green"
+              : cuota.estado === "R"
+              ? "orange"
+              : "black",
+        },
+        adjustDate(cuota.fecha_vencimiento),
+        {
+          text: cuota.monto_pagado || "",
+          fillColor: cuota.monto_pagado ? "#fde68a" : null,
+        },
+        {
+          text: adjustDate(cuota.fecha_pago),
+          fillColor: cuota.fecha_pago ? "#fde68a" : null,
+        },
+        {
+          text: cuota.numero_boleta || "",
+          fillColor: cuota.numero_boleta ? "#bae6fd" : null,
+        },
+        {
+          text: adjustDate(cuota.fecha_boleta),
+          fillColor: cuota.fecha_boleta ? "#bae6fd" : null,
+        },
+      ]),
+    ];
+  
+    const docDefinition = {
+      content: [
+        { text: "Estado de Cuenta", style: "titulo" },
+  
+        {
+          columns: [
+            {
+              width: "50%",
+              stack: [
+                {
+                  image: "fotoEstudiante",
+                  width: 100,
+                  height: 100,
+                  alignment: "left",
+                  margin: [0, 0, 0, 5],
+                },
+                { text: `Estudiante: ${values.estudiante_nombre}`, style: "info" },
+                { text: `Grado: ${values.grado}`, style: "info" },
+              ],
+            },
+            {
+              width: "50%",
+              stack: [
+                {
+                  image: "logoColegio",
+                  width: 100,
+                  height: 100,
+                  alignment: "right",
+                  margin: [0, 0, 0, 5],
+                },
+                { text: `Colegio: ${values.colegio_nombre}`, style: "info", alignment: "right" },
+                { text: `Teléfono: ${values.colegio_telefono}`, style: "info", alignment: "right" },
+                { text: `${values.colegio_correo}`, style: "info", alignment: "right" },
+              ],
+            },
+          ],
+          margin: [0, 0, 0, 10],
+        },
+  
+        {
+          table: {
+            headerRows: 1,
+            widths: ["auto", "*", "*", "*", "*", "*", "*", "*"],
+            body,
+          },
+          layout: "lightHorizontalLines",
+        },
+      ],
+      styles: {
+        titulo: {
+          fontSize: 18,
+          bold: true,
+          alignment: "center",
+          margin: [0, 0, 0, 10],
+        },
+        info: {
+          fontSize: 10,
+          margin: [0, 2, 0, 2],
+        },
+      },
+      images: {
+        logoColegio: `${values.colegio_logo}`,
+        fotoEstudiante: `${values.estudiante_fotografia}`,
+      },
+      defaultStyle: {
+        fontSize: 9,
+      },
+    };
+  
+    const nombreArchivo = getFormatRandomName("estado_cuenta_padre");
+    pdfMake.createPdf(docDefinition).download(`${nombreArchivo}.pdf`);
+  };
+
   return (
     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0 p-6">
-      <h3 className="font-semibold text-lg text-blueGray-700 mb-4">Estado de Cuenta</h3>
+      <h3 className="font-semibold text-lg text-blueGray-700 mb-4">Estado de Cuenta - Padre de Familia</h3>
       <div className="flex items-center space-x-4 mb-6">
         <select
           className="border px-4 py-2 rounded w-1/3"
@@ -103,6 +262,12 @@ export default function EstadoCuentaPrincipal() {
           onClick={handleBuscar}
         >
           <i className="fas fa-search mr-2"></i> Buscar
+        </button>
+        <button
+          className="bg-emerald-500 text-white px-4 py-2 rounded flex items-center"
+          onClick={generarPDF}
+        >
+          <i className="fas fa-file-pdf mr-2"></i> Descargar PDF
         </button>
       </div>
       <div className="block w-full overflow-x-auto">

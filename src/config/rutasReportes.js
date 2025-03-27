@@ -6,7 +6,7 @@ export const rutasReportes = [
     path: "/admin/EstadoCuenta/EstadoCuentaPrincipal",
     name: "Estado Cuenta",
     icon: "fa-solid fa-star",
-    roles: ["A", "P"],
+    roles: ["P"],
     hideInSidebar: false,
     order: 1,
     component: EstadoCuentaPrincipal,
