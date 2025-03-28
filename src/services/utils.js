@@ -27,3 +27,10 @@ export const getFormatRandomName = (module) => {
     fixName += `_${getRandomId()}`
     return fixName
 };
+
+export const adjustDate = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
+  return date.toLocaleDateString();
+};
