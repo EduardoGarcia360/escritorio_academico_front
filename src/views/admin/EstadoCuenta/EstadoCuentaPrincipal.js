@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { api } from "services/api";
 import { getFormatRandomName } from "services/utils";
+import { adjustDate } from "services/utils";
 var pdfMake = require('pdfmake/build/pdfmake.js');
 var pdfFonts = require('pdfmake/build/vfs_fonts.js');
 pdfMake.addVirtualFileSystem(pdfFonts);
@@ -85,13 +86,6 @@ export default function EstadoCuentaPrincipal() {
         {descripcion}
       </span>
     );
-  };
-
-  const adjustDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   const generarPDF = async () => {

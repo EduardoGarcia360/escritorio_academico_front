@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { api } from "services/api";
+import { adjustDate } from "services/utils";
 
 export default function CuentaBancariaPrincipal() {
   const [cuentas, setCuentas] = useState([]);
@@ -58,12 +59,6 @@ export default function CuentaBancariaPrincipal() {
       default:
         return "Desconocido";
     }
-  };
-
-  const adjustDate = (dateString) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   return (
