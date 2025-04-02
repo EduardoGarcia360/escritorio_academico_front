@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { api } from "services/api";
+import { getFormatRandomName } from "services/utils";
 
 export default function PagoCuotaGestionar() {
   const { idCiclo, idJornadaCiclo, idGrado, idEstudiante, idCuota } =
@@ -115,6 +116,31 @@ export default function PagoCuotaGestionar() {
     } catch (error) {
       console.error("Error al registrar el pago:", error);
       alert("Ocurrió un error al registrar el pago");
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const extension = file.name.split(".").pop();
+      const randomName = getFormatRandomName("BOLETA");
+      const finalName = `${randomName}.${extension}`;
+      console.log("Nombre de archivo final:", finalName);
+  
+      setFormData((prev) => ({
+        ...prev,
+        imagen_boleta: finalName, // este es el nombre que irá a la base de datos
+      }));
+  
+      // Guardamos el archivo y también su nuevo nombre para luego subirlo
+      const renamedFile = new File([file], finalName, { type: file.type });
+      setSelectedFile(renamedFile);
+    } else {
+      setSelectedFile(null);
+      setFormData((prev) => ({
+        ...prev,
+        imagen_boleta: "", // Limpiamos el nombre si no hay archivo
+      }));
     }
   };
 
@@ -291,16 +317,7 @@ export default function PagoCuotaGestionar() {
                 name="imagen_boleta"
                 accept="image/*"
                 onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    // Guardar solo el nombre en formData
-                    setFormData((prev) => ({
-                      ...prev,
-                      imagen_boleta: file.name,
-                    }));
-                    // Guardar el archivo completo para la subida posterior
-                    setSelectedFile(file);
-                  }
+                  handleFileChange(e);
                 }}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 disabled={isPaid}
