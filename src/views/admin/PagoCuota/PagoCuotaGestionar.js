@@ -328,11 +328,11 @@ export default function PagoCuotaGestionar() {
             }
             {
               (isPaid && formData.imagen_boleta) && (<div className="flex justify-center items-center mt-8">
-                <div className="w-[500px] h-[500px] bg-white shadow-md rounded-md flex justify-center items-center overflow-hidden">
+                <div className="flex justify-center items-center overflow-hidden" style={{ maxWidth: '500px', maxHeight: '500px' }}>
                   <img
                     src={`${urlFileServer}${formData.imagen_boleta}`}
                     alt="Imagen de la Boleta"
-                    className="object-contain max-w-full max-h-full"
+                    className="object-contain w-auto h-auto max-w-[500px] max-h-[500px]"
                   />
                 </div>
               </div>)
