@@ -6,6 +6,7 @@ export default function EstudiantePrincipal() {
   const [hasMounted, setHasMounted] = useState(false);
   const [registros, setRegistros] = useState([]);
   const history = useHistory();
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
 
   const getDatos = async () => {
     try {
@@ -158,14 +159,14 @@ export default function EstudiantePrincipal() {
               {registros.map((estudiante) => (
                 <tr key={estudiante.id_estudiante}>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    <img
-                      src={
-                        estudiante.fotografia ||
-                        "https://via.placeholder.com/50"
-                      }
-                      alt="Fotografía"
-                      className="h-12 w-12 rounded-full border"
-                    />
+                    {
+                      estudiante.fotografia && (<img
+                        src={`${urlFileServer}${estudiante.fotografia}`}
+                        alt="Fotografia del Estudiante"
+                        className="h-12 w-12 rounded-full border"
+                      />)
+                    }
+                    
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     {estudiante.nombre_completo}
