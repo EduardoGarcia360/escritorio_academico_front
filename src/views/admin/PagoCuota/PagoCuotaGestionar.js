@@ -19,6 +19,7 @@ export default function PagoCuotaGestionar() {
     fecha_pago: "",
   });
   const [isPaid, setIsPaid] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const fetchResumenCuota = async () => {
@@ -90,10 +91,19 @@ export default function PagoCuotaGestionar() {
       fecha_pago: new Date().toISOString().split("T")[0],
       id_cuota_estudiante: idCuota,
     };
+    console.log('pagos cuota', payload);
 
     try {
       const response = await api.post("pagoscuota/", payload);
       if (response.status === 200) {
+        // Si se subió imagen, enviarla al backend
+        if (selectedFile) {
+          const imageForm = new FormData();
+          imageForm.append("image", selectedFile);
+          imageForm.append("filename", selectedFile.name);
+
+          await api.post("upload", imageForm); // <-- ajusta si necesitas ruta completa
+        }
         alert("Pago registrado exitosamente");
         history.push(
           `/admin/CuotaEstudiante/CuotaEstudiantePrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/estudiante/${idEstudiante}`
@@ -278,9 +288,19 @@ export default function PagoCuotaGestionar() {
                 type="file"
                 id="imagen_boleta"
                 name="imagen_boleta"
-                onChange={(e) =>
-                  setFormData({ ...formData, imagen_boleta: e.target.files[0] })
-                }
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    // Guardar solo el nombre en formData
+                    setFormData((prev) => ({
+                      ...prev,
+                      imagen_boleta: file.name,
+                    }));
+                    // Guardar el archivo completo para la subida posterior
+                    setSelectedFile(file);
+                  }
+                }}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                 disabled={isPaid}
               />
