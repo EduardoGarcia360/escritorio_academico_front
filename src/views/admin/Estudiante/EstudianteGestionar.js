@@ -59,7 +59,7 @@ export default function EstudianteGestionar() {
             imageForm.append("image", selectedFile);
             imageForm.append("filename", selectedFile.name);
   
-            const respFile = await api.doUpload("upload", imageForm); // <-- ajusta si necesitas ruta completa
+            const respFile = await api.doUpload("upload", imageForm);
             console.log("Respuesta de la subida de imagen:", respFile);
           }
           alert('Registro actualizado exitosamente');
@@ -76,7 +76,7 @@ export default function EstudianteGestionar() {
             imageForm.append("image", selectedFile);
             imageForm.append("filename", selectedFile.name);
   
-            const respFile = await api.doUpload("upload", imageForm); // <-- ajusta si necesitas ruta completa
+            const respFile = await api.doUpload("upload", imageForm);
             console.log("Respuesta de la subida de imagen:", respFile);
           }
           alert('Registro creado exitosamente');
