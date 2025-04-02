@@ -22,7 +22,15 @@ export const api = {
             }
 
             const responseData = await response.json();
-            return { data: responseData, status: response.status };
+
+            if (!responseData) {
+                return { status: 500, data: { status: 'ERROR', message: 'Error en la solicitud UPLOAD' } };
+            }
+
+            // Descifrar el payload si está presente
+            const decryptedData = responseData.payload ? descifrarObjeto(responseData.payload) : responseData;
+
+            return { data: decryptedData, status: response.status };
         } catch (error) {
             console.error('Error en doUpload:', error);
             return { status: 500, data: { status: 'ERROR', message: error.message } };
