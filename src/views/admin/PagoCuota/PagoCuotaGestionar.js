@@ -21,6 +21,7 @@ export default function PagoCuotaGestionar() {
   });
   const [isPaid, setIsPaid] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
 
   useEffect(() => {
     const fetchResumenCuota = async () => {
@@ -304,25 +305,38 @@ export default function PagoCuotaGestionar() {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label
-                htmlFor="imagen_boleta"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Imagen de la Boleta
-              </label>
-              <input
-                type="file"
-                id="imagen_boleta"
-                name="imagen_boleta"
-                accept="image/*"
-                onChange={(e) => {
-                  handleFileChange(e);
-                }}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                disabled={isPaid}
-              />
-            </div>
+            {
+              !isPaid && (<div className="mb-4">
+                <label
+                  htmlFor="imagen_boleta"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Imagen de la Boleta
+                </label>
+                <input
+                  type="file"
+                  id="imagen_boleta"
+                  name="imagen_boleta"
+                  accept="image/*"
+                  onChange={(e) => {
+                    handleFileChange(e);
+                  }}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  disabled={isPaid}
+                />
+              </div>)
+            }
+            {
+              (isPaid && formData.imagen_boleta) && (<div className="flex justify-center items-center mt-8">
+                <div className="w-[500px] h-[500px] bg-white shadow-md rounded-md flex justify-center items-center overflow-hidden">
+                  <img
+                    src={`${urlFileServer}${formData.imagen_boleta}`}
+                    alt="Imagen de la Boleta"
+                    className="object-contain max-w-full max-h-full"
+                  />
+                </div>
+              </div>)
+            }
             <div className="mb-4">
               <label
                 htmlFor="fecha_pago"
