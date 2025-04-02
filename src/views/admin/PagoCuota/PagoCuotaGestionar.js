@@ -102,7 +102,8 @@ export default function PagoCuotaGestionar() {
           imageForm.append("image", selectedFile);
           imageForm.append("filename", selectedFile.name);
 
-          await api.post("upload", imageForm); // <-- ajusta si necesitas ruta completa
+          const respFile = await api.doUpload("upload", imageForm); // <-- ajusta si necesitas ruta completa
+          console.log("Respuesta de la subida de imagen:", respFile);
         }
         alert("Pago registrado exitosamente");
         history.push(
