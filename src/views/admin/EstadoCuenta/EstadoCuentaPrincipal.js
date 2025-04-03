@@ -11,6 +11,7 @@ export default function EstadoCuentaPrincipal() {
   const [idEstudiante, setIdEstudiante] = useState("");
   const [estadoCuenta, setEstadoCuenta] = useState([]);
   const [hasMounted, setHasMounted] = useState(false);
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
 
   const fetchEstudiantes = async () => {
     try {
@@ -223,8 +224,8 @@ export default function EstadoCuentaPrincipal() {
         },
       },
       images: {
-        logoColegio: `${values.colegio_logo}`,
-        fotoEstudiante: `${values.estudiante_fotografia}`,
+        logoColegio: `${urlFileServer}${values.colegio_logo}`,
+        fotoEstudiante: `${urlFileServer}${values.estudiante_fotografia}`,
       },
       defaultStyle: {
         fontSize: 9,
