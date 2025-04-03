@@ -47,13 +47,24 @@ export default function GastoExtraGestionar() {
 
     try {
       if (id) {
-        await api.put(`gastosextraordinarios/${id}`, formData);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`gastosextraordinarios/${id}`, formData);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/GastoExtra/GastoExtraPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('gastosextraordinarios/', formData);
-        alert('Registro creado exitosamente');
+        const response = await api.post('gastosextraordinarios/', formData);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push('/admin/GastoExtra/GastoExtraPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push('/admin/GastoExtra/GastoExtraPrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

@@ -47,9 +47,14 @@ export default function TutorPrincipal() {
     const confirmar = window.confirm("¿Está seguro que desea eliminar este registro?");
     if (confirmar) {
       try {
-        await api.delete(`tutores/${tutorId}`);
-        alert("Tutor eliminado correctamente.");
-        setTutores((prevTutores) => prevTutores.filter((tutor) => tutor.id_tutor !== tutorId));
+        const response = await api.delete(`tutores/${tutorId}`);
+        console.log('response', response)
+        if (response.status === 200) {
+          alert("Tutor eliminado correctamente.");
+          setTutores((prevTutores) => prevTutores.filter((tutor) => tutor.id_tutor !== tutorId));
+        } else {
+          alert(response.data.message);
+        }
       } catch (error) {
         console.error("Error al eliminar tutor:", error);
         alert("Ocurrió un error al intentar eliminar el tutor.");

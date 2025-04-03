@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { api } from "services/api";
+import { adjustDate } from "services/utils";
 
 export default function CuotaEstudiantePrincipal() {
   const [cuotas, setCuotas] = useState([]);
@@ -34,12 +35,6 @@ export default function CuotaEstudiantePrincipal() {
 
   const handleGestionar = (idCuota) => {
     history.push(`/admin/PagoCuota/PagoCuotaGestionar/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/estudiante/${idEstudiante}/cuota/${idCuota}`);
-  };
-
-  const adjustDate = (dateString) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   const renderEstado = (estado) => {

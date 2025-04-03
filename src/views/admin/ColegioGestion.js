@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { api } from "services/api";
+import { getFormatRandomName } from "services/utils";
 
 export default function ColegioGestion() {
   const history = useHistory();
@@ -15,6 +16,8 @@ export default function ColegioGestion() {
     tipo_colegio: "",
     director: "",
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,8 +30,18 @@ export default function ColegioGestion() {
     const response = await api.put('colegios/', formData)
     // console.log('Colegio upd', response)
     if (response.status === 200) {
+      if (selectedFile) {
+        const imageForm = new FormData();
+        imageForm.append("image", selectedFile);
+        imageForm.append("filename", selectedFile.name);
+
+        const respFile = await api.doUpload("upload", imageForm);
+        console.log("Respuesta de la subida de imagen:", respFile);
+      }
       alert(response.data.message);
       history.push("/admin/dashboard");
+    } else {
+      alert(response.data.message)
     }
   };
 
@@ -42,6 +55,31 @@ export default function ColegioGestion() {
     // console.log('Colegio', response)
     setFormData(response.data)
   }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const extension = file.name.split(".").pop();
+      const randomName = getFormatRandomName("COLEGIO");
+      const finalName = `${randomName}.${extension}`;
+      console.log("Nombre de archivo final:", finalName);
+  
+      setFormData((prev) => ({
+        ...prev,
+        logo: finalName, // este es el nombre que irá a la base de datos
+      }));
+  
+      // Guardamos el archivo y también su nuevo nombre para luego subirlo
+      const renamedFile = new File([file], finalName, { type: file.type });
+      setSelectedFile(renamedFile);
+    } else {
+      setSelectedFile(null);
+      setFormData((prev) => ({
+        ...prev,
+        logo: "", // Limpiamos el nombre si no hay archivo
+      }));
+    }
+  };
 
   useEffect(() => {
     if (hasMounted) {
@@ -151,24 +189,6 @@ export default function ColegioGestion() {
             />
           </div>
 
-          {/* Logo */}
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="logo"
-            >
-              Logo
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="logo"
-              type="text"
-              name="logo"
-              value={formData.logo}
-              onChange={handleChange}
-            />
-          </div>
-
           {/* Tipo de Colegio */}
           <div className="mb-4">
             <label
@@ -205,6 +225,36 @@ export default function ColegioGestion() {
               required
             />
           </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="logo"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Logo
+            </label>
+            <input
+              type="file"
+              id="logo"
+              name="logo"
+              accept="image/*"
+              onChange={(e) => {
+                handleFileChange(e);
+              }}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            />
+          </div>
+          {
+            (formData.logo) && (<div className="flex justify-center items-center mt-8">
+              <div className="flex justify-center items-center overflow-hidden" style={{ maxWidth: '300px', maxHeight: '300px' }}>
+                <img
+                  src={`${urlFileServer}${formData.logo}`}
+                  alt="Logo del colegio"
+                  className="object-contain w-auto h-auto max-w-[300px] max-h-[300px]"
+                />
+              </div>
+            </div>)
+          }
 
           {/* Botones */}
           <div className="flex items-center justify-between">

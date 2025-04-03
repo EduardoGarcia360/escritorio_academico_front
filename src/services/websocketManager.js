@@ -8,12 +8,13 @@ import { api } from "./api.js";
 const backGeolocation = null;
 
 class WebSocketManager {
-  constructor(url, roomId = null) {
+  constructor(url, roomId = null, tipoUbicacion = null) {
     this.url = url;
     this.socket = null;
     this.intervalId = null;
     this.roomId = roomId;
     this.idBackGeolocation = null;
+    this.tipoUbicacion = tipoUbicacion;
   }
 
   // Inicia la conexión con Socket.io
@@ -83,7 +84,8 @@ class WebSocketManager {
   }
 
   // Inicia el envío periódico cada 30 segundos
-  iniciarEnvioPeriodo() {
+  iniciarEnvioPeriodo(tipoUbicacion) {
+    this.tipoUbicacion = tipoUbicacion;
     this.iniciarBackGeolocation();
   }
 
@@ -117,7 +119,8 @@ class WebSocketManager {
       simulated: location.simulated,
       speed: location.speed,
       bearing: location.bearing,
-      time: location.time
+      time: location.time,
+      tipo_ubicacion: this.tipoUbicacion,
     }
     console.log('FORM DATA', formData)
     const response = await api.post('coordenadasbus/', formData)

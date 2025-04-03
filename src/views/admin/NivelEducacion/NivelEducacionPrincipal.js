@@ -32,9 +32,14 @@ export default function NivelEducacionPrincipal() {
     const confirmar = window.confirm("¿Está seguro que desea eliminar este registro?");
     if (confirmar) {
       try {
-        await api.delete(`niveleducacion/${id}`);
-        alert("Nivel de educación eliminado correctamente.");
-        setNiveles((prevNiveles) => prevNiveles.filter((nivel) => nivel.id_nivel !== id));
+        const response = await api.delete(`niveleducacion/${id}`);
+        console.log('response', response)
+        if (response.status === 200) {
+          alert("Nivel de educación eliminado correctamente.");
+          setNiveles((prevNiveles) => prevNiveles.filter((nivel) => nivel.id_nivel !== id));
+        } else {
+          alert(response.data.message);
+        }
       } catch (error) {
         console.error("Error al eliminar nivel de educación:", error);
         alert("Ocurrió un error al intentar eliminar el nivel de educación.");

@@ -84,13 +84,24 @@ export default function AsignarBusGestionar() {
 
     try {
       if (idTransporte) {
-        await api.put(`asignacionestransporteextra/${idTransporte}`, formData);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`asignacionestransporteextra/${idTransporte}`, formData);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push(`/admin/AsignarBus/AsignarBusPrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/actividad/${idAsignacion}/transporte/`);
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('asignacionestransporteextra/', formData);
-        alert('Registro creado exitosamente');
+        const response = await api.post('asignacionestransporteextra/', formData);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push(`/admin/AsignarBus/AsignarBusPrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/actividad/${idAsignacion}/transporte/`);
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push(`/admin/AsignarBus/AsignarBusPrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/actividad/${idAsignacion}/transporte/`);
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

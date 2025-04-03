@@ -60,13 +60,24 @@ export default function CuentaBancariaGestionar() {
 
     try {
       if (id) {
-        await api.put(`cuentasbancarias/${id}`, formData);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`cuentasbancarias/${id}`, formData);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/CuentaBancaria/CuentaBancariaPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('cuentasbancarias/', formData);
-        alert('Registro creado exitosamente');
+        const response = await api.post('cuentasbancarias/', formData);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push('/admin/CuentaBancaria/CuentaBancariaPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push('/admin/CuentaBancaria/CuentaBancariaPrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

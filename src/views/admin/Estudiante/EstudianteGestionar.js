@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { api } from "services/api";
+import { getFormatRandomName } from "services/utils";
 
 export default function EstudianteGestionar() {
   const { id } = useParams();
   const history = useHistory();
 
   const [formData, setFormData] = useState({
+    fotografia: '',
     nombre_completo: '',
     fecha_nacimiento: '',
     identificacion: '',
@@ -21,6 +23,8 @@ export default function EstudianteGestionar() {
     condiciones_especiales: '',
     observaciones: '',
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,13 +53,32 @@ export default function EstudianteGestionar() {
         const response = await api.put(`estudiantes/${id}`, formData);
         console.log('actualizar', response)
         if (response.status === 200) {
+          // Si se subió imagen, enviarla al backend
+          if (selectedFile) {
+            const imageForm = new FormData();
+            imageForm.append("image", selectedFile);
+            imageForm.append("filename", selectedFile.name);
+  
+            const respFile = await api.doUpload("upload", imageForm);
+            console.log("Respuesta de la subida de imagen:", respFile);
+          }
           alert('Registro actualizado exitosamente');
           history.push('/admin/EstudiantePrincipal');
+        } else {
+          alert(response.data.message)
         }
       } else {
         const response = await api.post('estudiantes/', formData);
         console.log('nuevo', response)
         if (response.status === 200) {
+          if (selectedFile) {
+            const imageForm = new FormData();
+            imageForm.append("image", selectedFile);
+            imageForm.append("filename", selectedFile.name);
+  
+            const respFile = await api.doUpload("upload", imageForm);
+            console.log("Respuesta de la subida de imagen:", respFile);
+          }
           alert('Registro creado exitosamente');
           generarCuotas(response.data.id_estudiante)
         } else {
@@ -67,6 +90,31 @@ export default function EstudianteGestionar() {
       alert('Ocurrió un error al guardar los datos');
     }
   };
+
+  const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const extension = file.name.split(".").pop();
+        const randomName = getFormatRandomName("ESTUDIANTE");
+        const finalName = `${randomName}.${extension}`;
+        console.log("Nombre de archivo final:", finalName);
+    
+        setFormData((prev) => ({
+          ...prev,
+          fotografia: finalName, // este es el nombre que irá a la base de datos
+        }));
+    
+        // Guardamos el archivo y también su nuevo nombre para luego subirlo
+        const renamedFile = new File([file], finalName, { type: file.type });
+        setSelectedFile(renamedFile);
+      } else {
+        setSelectedFile(null);
+        setFormData((prev) => ({
+          ...prev,
+          fotografia: "", // Limpiamos el nombre si no hay archivo
+        }));
+      }
+    };
 
   useEffect(() => {
     if (id) {
@@ -232,6 +280,35 @@ export default function EstudianteGestionar() {
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
+          <div className="mb-4">
+            <label
+              htmlFor="fotografia"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Fotografia
+            </label>
+            <input
+              type="file"
+              id="fotografia"
+              name="fotografia"
+              accept="image/*"
+              onChange={(e) => {
+                handleFileChange(e);
+              }}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            />
+          </div>
+          {
+            (id) && (<div className="flex justify-center items-center mt-8">
+              <div className="flex justify-center items-center overflow-hidden" style={{ maxWidth: '500px', maxHeight: '500px' }}>
+                <img
+                  src={`${urlFileServer}${formData.fotografia}`}
+                  alt="Fotografia del Estudiante"
+                  className="object-contain w-auto h-auto max-w-[500px] max-h-[500px]"
+                />
+              </div>
+            </div>)
+          }
 
           <div className="flex items-center justify-between">
             <button

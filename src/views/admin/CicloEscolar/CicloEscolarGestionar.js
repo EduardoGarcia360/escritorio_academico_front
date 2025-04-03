@@ -51,17 +51,22 @@ export default function CicloEscolarGestionar() {
       if (id) {
         const response = await api.put(`ciclosescolares/${id}`, formData);
         console.log('actualizar', response)
-        alert('Registro actualizado exitosamente');
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/CicloEscolar/CicloEscolarPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       } else {
         const response = await api.post('ciclosescolares/', formData);
         console.log('nuevo', response)
         if (response.status === 200) {
-            alert('Registro creado exitosamente');
+          alert('Registro creado exitosamente');
+          history.push('/admin/CicloEscolar/CicloEscolarPrincipal');
         } else {
-            alert(response.data.message);
+          alert(response.data.message)
         }
       }
-      history.push('/admin/CicloEscolar/CicloEscolarPrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

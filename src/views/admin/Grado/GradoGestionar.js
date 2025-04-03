@@ -61,13 +61,24 @@ export default function GradoGestionar() {
 
     try {
       if (idGrado) {
-        await api.put(`grados/${idGrado}`, payload);
-        alert('Grado actualizado exitosamente');
+        const response = await api.put(`grados/${idGrado}`, payload);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push(`/admin/Grado/GradoPrincipal/${idCiclo}/jornada/${idJornadaCiclo}`);
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('grados/', payload);
-        alert('Grado creado exitosamente');
+        const response = await api.post('grados/', payload);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push(`/admin/Grado/GradoPrincipal/${idCiclo}/jornada/${idJornadaCiclo}`);
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push(`/admin/Grado/GradoPrincipal/${idCiclo}/jornada/${idJornadaCiclo}`);
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

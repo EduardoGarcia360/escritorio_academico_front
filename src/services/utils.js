@@ -11,3 +11,26 @@ export const formatearFechaDateTime = (fecha) => {
 
     return `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
 };
+
+export const getFormatRandomName = (module) => {
+    const getRandomId = () => {
+      return String(Math.floor(Math.random() * 10000))
+    }
+    const currentDate = new Date()
+    let fixName = `${module}_${currentDate.getFullYear()}`
+    fixName += `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`
+    fixName += `${currentDate.getDate().toString().padStart(2, '0')}`
+    fixName += `_${currentDate.getHours().toString().padStart(2, '0')}`
+    fixName += `${currentDate.getMinutes().toString().padStart(2, '0')}`
+    fixName += `${currentDate.getSeconds().toString().padStart(2, '0')}`
+    fixName += `_${currentDate.getMilliseconds().toString()}`
+    fixName += `_${getRandomId()}`
+    return fixName
+};
+
+export const adjustDate = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  date.setDate(date.getDate() + 1);
+  return date.toLocaleDateString();
+};

@@ -26,13 +26,22 @@ export default function NivelEducacionGestionar() {
       if (id) {
         const response = await api.put(`niveleducacion/${id}`, formData);
         console.log('actualizar', response)
-        alert('Registro actualizado exitosamente');
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/NivelEducacion/NivelEducacionPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       } else {
         const response = await api.post('niveleducacion/', formData);
         console.log('nuevo', response)
-        alert('Registro creado exitosamente');
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push('/admin/NivelEducacion/NivelEducacionPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push('/admin/NivelEducacion/NivelEducacionPrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

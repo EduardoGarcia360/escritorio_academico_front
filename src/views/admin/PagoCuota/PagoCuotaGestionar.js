@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { api } from "services/api";
+import { getFormatRandomName } from "services/utils";
 
 export default function PagoCuotaGestionar() {
   const { idCiclo, idJornadaCiclo, idGrado, idEstudiante, idCuota } =
@@ -19,6 +20,8 @@ export default function PagoCuotaGestionar() {
     fecha_pago: "",
   });
   const [isPaid, setIsPaid] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
 
   useEffect(() => {
     const fetchResumenCuota = async () => {
@@ -90,10 +93,20 @@ export default function PagoCuotaGestionar() {
       fecha_pago: new Date().toISOString().split("T")[0],
       id_cuota_estudiante: idCuota,
     };
+    console.log('pagos cuota', payload);
 
     try {
       const response = await api.post("pagoscuota/", payload);
       if (response.status === 200) {
+        // Si se subió imagen, enviarla al backend
+        if (selectedFile) {
+          const imageForm = new FormData();
+          imageForm.append("image", selectedFile);
+          imageForm.append("filename", selectedFile.name);
+
+          const respFile = await api.doUpload("upload", imageForm);
+          console.log("Respuesta de la subida de imagen:", respFile);
+        }
         alert("Pago registrado exitosamente");
         history.push(
           `/admin/CuotaEstudiante/CuotaEstudiantePrincipal/${idCiclo}/jornada/${idJornadaCiclo}/grado/${idGrado}/estudiante/${idEstudiante}`
@@ -104,6 +117,31 @@ export default function PagoCuotaGestionar() {
     } catch (error) {
       console.error("Error al registrar el pago:", error);
       alert("Ocurrió un error al registrar el pago");
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const extension = file.name.split(".").pop();
+      const randomName = getFormatRandomName("BOLETA");
+      const finalName = `${randomName}.${extension}`;
+      console.log("Nombre de archivo final:", finalName);
+  
+      setFormData((prev) => ({
+        ...prev,
+        imagen_boleta: finalName, // este es el nombre que irá a la base de datos
+      }));
+  
+      // Guardamos el archivo y también su nuevo nombre para luego subirlo
+      const renamedFile = new File([file], finalName, { type: file.type });
+      setSelectedFile(renamedFile);
+    } else {
+      setSelectedFile(null);
+      setFormData((prev) => ({
+        ...prev,
+        imagen_boleta: "", // Limpiamos el nombre si no hay archivo
+      }));
     }
   };
 
@@ -267,24 +305,38 @@ export default function PagoCuotaGestionar() {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label
-                htmlFor="imagen_boleta"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Imagen de la Boleta
-              </label>
-              <input
-                type="file"
-                id="imagen_boleta"
-                name="imagen_boleta"
-                onChange={(e) =>
-                  setFormData({ ...formData, imagen_boleta: e.target.files[0] })
-                }
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                disabled={isPaid}
-              />
-            </div>
+            {
+              !isPaid && (<div className="mb-4">
+                <label
+                  htmlFor="imagen_boleta"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Imagen de la Boleta
+                </label>
+                <input
+                  type="file"
+                  id="imagen_boleta"
+                  name="imagen_boleta"
+                  accept="image/*"
+                  onChange={(e) => {
+                    handleFileChange(e);
+                  }}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  disabled={isPaid}
+                />
+              </div>)
+            }
+            {
+              (isPaid && formData.imagen_boleta) && (<div className="flex justify-center items-center mt-8">
+                <div className="flex justify-center items-center overflow-hidden" style={{ maxWidth: '500px', maxHeight: '500px' }}>
+                  <img
+                    src={`${urlFileServer}${formData.imagen_boleta}`}
+                    alt="Imagen de la Boleta"
+                    className="object-contain w-auto h-auto max-w-[500px] max-h-[500px]"
+                  />
+                </div>
+              </div>)
+            }
             <div className="mb-4">
               <label
                 htmlFor="fecha_pago"

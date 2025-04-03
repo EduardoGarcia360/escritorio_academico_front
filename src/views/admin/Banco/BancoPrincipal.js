@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { api } from "services/api";
+import { adjustDate } from "services/utils";
 
 export default function BancoPrincipal() {
   const [bancos, setBancos] = useState([]);
@@ -44,12 +45,6 @@ export default function BancoPrincipal() {
         alert("Ocurrió un error al intentar eliminar el banco.");
       }
     }
-  };
-
-  const adjustDate = (dateString) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   return (

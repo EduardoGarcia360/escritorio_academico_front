@@ -45,13 +45,24 @@ export default function CuotaColegioGestionar() {
 
     try {
       if (id) {
-        await api.put(`cuotascolegio/${id}`, formData);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`cuotascolegio/${id}`, formData);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/CuotaColegio/CuotaColegioPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('cuotascolegio/', formData);
-        alert('Registro creado exitosamente');
+        const response = await api.post('cuotascolegio/', formData);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push('/admin/CuotaColegio/CuotaColegioPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push('/admin/CuotaColegio/CuotaColegioPrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');

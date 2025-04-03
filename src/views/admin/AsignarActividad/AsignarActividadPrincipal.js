@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { api } from "services/api";
+import { adjustDate } from "services/utils";
 
 export default function AsignarActividadPrincipal() {
   const [actividades, setActividades] = useState([]);
@@ -57,12 +58,6 @@ export default function AsignarActividadPrincipal() {
         alert("Ocurrió un error al intentar eliminar la asignación.");
       }
     }
-  };
-
-  const adjustDate = (dateString) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   const handleVerBuses = (id_asignacion) => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { api } from "services/api";
+import { adjustDate } from "services/utils";
 
 export default function CicloEscolarPrincipal() {
   const [ciclos, setCiclos] = useState([]);
@@ -26,12 +27,6 @@ export default function CicloEscolarPrincipal() {
 
   const handleEditar = (id) => {
     history.push(`/admin/CicloEscolar/CicloEscolarGestionar/${id}`);
-  };
-
-  const adjustDate = (dateString) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   const renderEstado = (estado) => {

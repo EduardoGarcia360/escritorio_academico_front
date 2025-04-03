@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { api } from "services/api";
+import { adjustDate } from "services/utils";
 
 export default function AsignarEstudiantePrincipal() {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -54,12 +55,6 @@ export default function AsignarEstudiantePrincipal() {
         alert("Ocurrió un error al intentar eliminar la asignación.");
       }
     }
-  };
-
-  const adjustDate = (dateString) => {
-    const date = new Date(dateString);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString();
   };
 
   const renderEstado = (estado) => {

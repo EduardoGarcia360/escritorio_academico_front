@@ -50,13 +50,24 @@ export default function BusGestionar() {
 
     try {
       if (id) {
-        await api.put(`buses/${id}`, formData);
-        alert('Registro actualizado exitosamente');
+        const response = await api.put(`buses/${id}`, formData);
+        console.log('actualizar', response)
+        if (response.status === 200) {
+          alert('Registro actualizado exitosamente');
+          history.push('/admin/Bus/BusPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       } else {
-        await api.post('buses/', formData);
-        alert('Registro creado exitosamente');
+        const response = await api.post('buses/', formData);
+        console.log('nuevo', response)
+        if (response.status === 200) {
+          alert('Registro creado exitosamente');
+          history.push('/admin/Bus/BusPrincipal');
+        } else {
+          alert(response.data.message)
+        }
       }
-      history.push('/admin/Bus/BusPrincipal');
     } catch (error) {
       console.error('Error al guardar los datos:', error);
       alert('Ocurrió un error al guardar los datos');
