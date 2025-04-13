@@ -420,8 +420,8 @@ export const rutas = [
     path: "/admin/TestWebSocket/TestWebSocketPrincipal",
     name: "IniciarWS",
     icon: "fa-solid fa-star",
-    roles: ["A"],
-    hideInSidebar: false,
+    roles: ["-"],
+    hideInSidebar: true,
     component: IniciarWS,
   },
   {
@@ -429,8 +429,8 @@ export const rutas = [
     path: "/admin/TestWebSocket/TestWebSocketSeguimiento",
     name: "SeguimientoWS",
     icon: "fa-solid fa-star",
-    roles: ["A"],
-    hideInSidebar: false,
+    roles: ["-"],
+    hideInSidebar: true,
     component: SeguimientoWS,
   },
   {
