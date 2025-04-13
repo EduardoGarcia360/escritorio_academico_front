@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createPopper } from "@popperjs/core";
 import { useHistory } from "react-router-dom";
 import { removeAllCookies } from "services/cookie.js";
@@ -10,9 +10,28 @@ const NotificationDropdown = () => {
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
   const history = useHistory();
+  const [hasMounted, setHasMounted] = useState(false);
+  const [colegioData, setColegioData] = useState({
+    logo: ""
+  });
+  const [usuarioData, setUsuarioData] = useState({
+    nombre_completo: ""
+  });
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
+  
+  const getColegio = async () => {
+    // const response = await api.get('colegios/')
+    // console.log('Colegio', response)
+    // setColegioData(response.data)
+  }
+
+  const getMiUsuario = async () => {
+    const response = await api.get('usuarios/miusuario')
+    // console.log('Usuario', response)
+    setUsuarioData(response.data)
+  }
 
   const openDropdownPopover = () => {
-    console.log("hey");
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
       placement: "bottom-start",
     });
@@ -38,6 +57,17 @@ const NotificationDropdown = () => {
     }
   };
 
+  useEffect(() => {
+    if (hasMounted) {
+      getColegio();
+      getMiUsuario();
+    }
+  }, [hasMounted]);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   return (
     <>
       <a
@@ -49,7 +79,6 @@ const NotificationDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        <i className="fas fa-bell"></i>
       </a>
       <div
         ref={popoverDropdownRef}
@@ -58,43 +87,8 @@ const NotificationDropdown = () => {
           "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 min-w-48"
         }
       >
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Action
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Another action
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Something else here
-        </a>
+        <p className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">{usuarioData.nombre_completo}</p>
         <div className="h-0 my-2 border border-solid border-blueGray-100" />
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Seprated link
-        </a>
         <a
           href="#logout"
           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
