@@ -420,8 +420,8 @@ export const rutas = [
     path: "/admin/TestWebSocket/TestWebSocketPrincipal",
     name: "IniciarWS",
     icon: "fa-solid fa-star",
-    roles: ["A"],
-    hideInSidebar: false,
+    roles: ["-"],
+    hideInSidebar: true,
     component: IniciarWS,
   },
   {
@@ -429,8 +429,8 @@ export const rutas = [
     path: "/admin/TestWebSocket/TestWebSocketSeguimiento",
     name: "SeguimientoWS",
     icon: "fa-solid fa-star",
-    roles: ["A"],
-    hideInSidebar: false,
+    roles: ["-"],
+    hideInSidebar: true,
     component: SeguimientoWS,
   },
   {
@@ -438,8 +438,8 @@ export const rutas = [
     path: "/admin/RegistroHorarioBus/RegistroHorarioBusPrincipal",
     name: "Registro Horario Bus",
     icon: "fa-solid fa-star",
-    roles: ["A"],
-    hideInSidebar: false,
+    roles: [process.env.REACT_APP_PLATAFORMA_ID === "2" ? "A" : "-"],
+    hideInSidebar: process.env.REACT_APP_PLATAFORMA_ID === "2" ? false : true,
     component: RegistroHorarioBusPrincipal,
   },
   {

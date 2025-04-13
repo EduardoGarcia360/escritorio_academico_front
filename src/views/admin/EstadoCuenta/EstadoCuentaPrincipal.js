@@ -12,6 +12,7 @@ export default function EstadoCuentaPrincipal() {
   const [estadoCuenta, setEstadoCuenta] = useState([]);
   const [hasMounted, setHasMounted] = useState(false);
   const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
+  const plataformaId = process.env.REACT_APP_PLATAFORMA_ID;
 
   const fetchEstudiantes = async () => {
     try {
@@ -258,12 +259,14 @@ export default function EstadoCuentaPrincipal() {
         >
           <i className="fas fa-search mr-2"></i> Buscar
         </button>
-        <button
-          className="bg-emerald-500 text-white px-4 py-2 rounded flex items-center"
-          onClick={generarPDF}
-        >
-          <i className="fas fa-file-pdf mr-2"></i> Descargar PDF
-        </button>
+        {
+          plataformaId === "1" && (<button
+            className="bg-emerald-500 text-white px-4 py-2 rounded flex items-center"
+            onClick={generarPDF}
+          >
+            <i className="fas fa-file-pdf mr-2"></i> Descargar PDF
+          </button>)
+        }
       </div>
       <div className="block w-full overflow-x-auto">
         <table className="items-center w-full bg-transparent border-collapse">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createPopper } from "@popperjs/core";
 import { useHistory } from "react-router-dom";
 import { removeAllCookies } from "services/cookie.js";
@@ -10,6 +10,26 @@ const UserDropdown = () => {
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
   const history = useHistory();
+  const [hasMounted, setHasMounted] = useState(false);
+  const [colegioData, setColegioData] = useState({
+    logo: ""
+  });
+  const [usuarioData, setUsuarioData] = useState({
+      nombre_completo: ""
+    });
+  const urlFileServer = process.env.REACT_APP_URL_FILE_SERVER;
+  
+  const getColegio = async () => {
+    const response = await api.get('colegios/')
+    // console.log('Colegio', response)
+    setColegioData(response.data)
+  }
+
+  const getMiUsuario = async () => {
+    const response = await api.get('usuarios/miusuario')
+    // console.log('Usuario', response)
+    setUsuarioData(response.data)
+  }
 
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
@@ -36,6 +56,17 @@ const UserDropdown = () => {
       console.error("Error al cerrar sesión:", error);
     }
   };
+
+  useEffect(() => {
+    if (hasMounted) {
+      getColegio();
+      getMiUsuario();
+    }
+  }, [hasMounted]);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
   
   return (
     <>
@@ -53,7 +84,7 @@ const UserDropdown = () => {
             <img
               alt="..."
               className="w-full rounded-full align-middle border-none shadow-lg"
-              src={require("assets/img/team-1-800x800.jpg").default}
+              src={`${urlFileServer}${colegioData.logo}`}
             />
           </span>
         </div>
@@ -65,43 +96,8 @@ const UserDropdown = () => {
           "bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
         }
       >
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Action
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Another action
-        </a>
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Something else here
-        </a>
+        <p className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">{usuarioData.nombre_completo}</p>
         <div className="h-0 my-2 border border-solid border-blueGray-100" />
-        <a
-          href="#pablo"
-          className={
-            "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          }
-          onClick={(e) => e.preventDefault()}
-        >
-          Seprated link
-        </a>
         <a
           href="#logout"
           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"

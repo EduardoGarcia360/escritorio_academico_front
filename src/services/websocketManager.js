@@ -141,26 +141,31 @@ class WebSocketManager {
 
   async iniciarBackGeolocation() {
     console.log('***** iniciarBackGeolocation *****')
-    await backGeolocation.addWatcher(
-      {
-        interval: 30000, //El intervalo en el que se comprueba la localización.
-        backgroundMessage: "Obteniendo ubicación...",
-        backgroundTitle: "Seguimiento Activo",
-        requestPermissions: true,
-        stale: false,
-      },
-      async (location) => {
-        if (location !== null) {
-          const ahora = new Date();
-          console.log(`obteniendo la ubicación ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`);
-          console.log('ubicación', JSON.stringify(location))
-          this.enviarMensajeConFecha(location);
+    try {
+      await backGeolocation.addWatcher(
+        {
+          interval: 30000, //El intervalo en el que se comprueba la localización.
+          backgroundMessage: "Obteniendo ubicación...",
+          backgroundTitle: "Seguimiento Activo",
+          requestPermissions: true,
+          stale: false,
+        },
+        async (location) => {
+          if (location !== null) {
+            const ahora = new Date();
+            console.log(`obteniendo la ubicación ${ahora.toLocaleDateString()} y ${ahora.toLocaleTimeString()}`);
+            console.log('ubicación', JSON.stringify(location))
+            this.enviarMensajeConFecha(location);
+          }
         }
-      }
-    ).then((watcher_id) =>  {
-      console.log('_____ ID PARA EL BACKGROUND', watcher_id)
-      this.idBackGeolocation = watcher_id
-    })
+      ).then((watcher_id) =>  {
+        console.log('_____ ID PARA EL BACKGROUND', watcher_id)
+        this.idBackGeolocation = watcher_id
+      })
+    } catch (error) {
+      console.error("Error al iniciar el watcher de geolocalización:", error);
+      this.idBackGeolocation = null;
+    }
   }
 }
 

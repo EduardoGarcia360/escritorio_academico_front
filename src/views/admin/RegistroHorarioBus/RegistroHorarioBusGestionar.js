@@ -34,7 +34,7 @@ export default function RegistroHorarioBusGestionar() {
       const response = await api.get(
         `asignacionestransporteextra/${idAsignacionTransporte}`
       );
-      console.log("registro", response);
+      // console.log("Asignaciones Transporte", response);
       const actividad = response.data;
       setRegistroActividad(actividad);
       setCodigoSala(
@@ -49,7 +49,7 @@ export default function RegistroHorarioBusGestionar() {
           params: ["id_asignacion_transporte"],
           objParams: { id_asignacion_transporte: idAsignacionTransporte },
         });
-        console.log("info actividad", response);
+        // console.log("info actividad", response);
         if (response.status === 200) {
           setActividadInfo(response.data.results[0]);
         }
@@ -66,7 +66,7 @@ export default function RegistroHorarioBusGestionar() {
           params: ["id_asignacion_transporte"],
           objParams: { id_asignacion_transporte: idAsignacionTransporte },
         });
-        console.log("info maestro", response);
+        // console.log("info maestro", response);
         if (response.status === 200) {
           setMaestroInfo(response.data.results[0]);
         }
@@ -82,25 +82,33 @@ export default function RegistroHorarioBusGestionar() {
     handleGetRegistros();
   }, [idAsignacionTransporte, history]);
 
-  const handleButtonClick = (boton) => {
+  const cambioEstadoBotones = (boton) => {
+    // console.warn("Cambio de estado de botones:", boton);
     setEstadoBotones((prev) => {
       const nuevoEstado = { ...prev };
       switch (boton) {
         case "iniciar":
           nuevoEstado.iniciar = false;
-          nuevoEstado.retorno = false;
           nuevoEstado.llegada = true;
+          nuevoEstado.retorno = false;
+          nuevoEstado.finalizar = false;
           break;
         case "llegada":
+          nuevoEstado.iniciar = false;
           nuevoEstado.llegada = false;
-          nuevoEstado.finalizar = false;
           nuevoEstado.retorno = true;
+          nuevoEstado.finalizar = false;
           break;
         case "retorno":
+          nuevoEstado.iniciar = false;
+          nuevoEstado.llegada = false;
           nuevoEstado.retorno = false;
           nuevoEstado.finalizar = true;
           break;
         case "finalizar":
+          nuevoEstado.iniciar = false;
+          nuevoEstado.llegada = false;
+          nuevoEstado.retorno = false;
           nuevoEstado.finalizar = false;
           break;
         default:
@@ -108,6 +116,10 @@ export default function RegistroHorarioBusGestionar() {
       }
       return nuevoEstado;
     });
+  }
+
+  const handleButtonClick = (boton) => {
+    cambioEstadoBotones(boton);
 
     // se genera un registro de tiempo
     const tipoRegistro = boton === "iniciar" || boton === "retorno" ? "S" : "L";
@@ -150,8 +162,20 @@ export default function RegistroHorarioBusGestionar() {
     const response = await api.get(
       `registroshorariobus/${idAsignacionTransporte}`
     );
-    console.log("LISTADO", response);
+    // console.log("LISTADO", response);
+    // se muestran los registros en pantalla
     setRegistroHorario(response.data);
+
+    // se cambia el estado de los botones dependiendo de la cantidad de registros
+    if (response.data.length === 1) {
+      cambioEstadoBotones("iniciar");
+    } else if (response.data.length === 2) {
+      cambioEstadoBotones("llegada");
+    } else if (response.data.length === 3) {
+      cambioEstadoBotones("retorno");
+    } else if (response.data.length > 3) {
+      cambioEstadoBotones("finalizar");
+    }
   };
 
   const getRegistroTexto = (registro) => {

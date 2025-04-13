@@ -26,8 +26,30 @@ export default function RegistroHorarioBusPrincipal() {
   }, []);
 
   const handleGestionar = (actividad) => {
-    console.log("Gestionar actividad:", actividad);
+    // console.log("Gestionar actividad:", actividad);
     history.push(`/admin/RegistroHorarioBus/RegistroHorarioBusGestionar/${actividad.id_asignacion_transporte}`);
+  };
+
+  const renderTipoRegistro = (tipoRegistro, estado) => {
+    // console.log("tipoRegistro", tipoRegistro, "estado", estado);
+    let colorClass = "";
+    let descripcion = "";
+    if (tipoRegistro === null && estado === "A") {
+      colorClass = "text-emerald-500";
+      descripcion = "Activo";
+    } else if (tipoRegistro === "L" && estado === "F") {
+      colorClass = "text-lightBlue-500";
+      descripcion = "Llegada (Finalizada)";
+    } else {
+      colorClass = "text-gray-500";
+      descripcion = "Desconocido";
+    }
+    return (
+      <span className="flex items-center">
+        <i className={`fas fa-circle ${colorClass} mr-2`}></i>
+        {descripcion}
+      </span>
+    );
   };
 
   return (
@@ -103,7 +125,7 @@ export default function RegistroHorarioBusPrincipal() {
                     {actividad.color}
                   </td>
                   <td className="border-t-0 px-6 py-4 text-xs text-left">
-                    {actividad.tipo_registro}
+                    {renderTipoRegistro(actividad.tipo_registro, actividad.estado)}
                   </td>
                   <td className="border-t-0 px-6 py-4 text-xs text-left">
                     {actividad.hora_finalizado}
